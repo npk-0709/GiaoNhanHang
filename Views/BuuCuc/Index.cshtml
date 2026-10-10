@@ -1,0 +1,40 @@
+@model List<BuuCuc>
+@{ ViewData["Title"] = "Bưu cục, kho"; }
+<div class="page-head">
+    <h1>Bưu cục, kho bãi</h1>
+    <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Thêm bưu cục"><i class="bi bi-plus-lg"></i> Thêm bưu cục</button>
+</div>
+<div class="panel flush">
+    <div class="table-wrap">
+        <table class="table table-hover">
+            <thead><tr><th>Mã</th><th>Tên bưu cục</th><th>Địa chỉ</th><th>Hotline</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.MaBuuCuc</td><td class="fw-semibold">@b.TenBuuCuc</td><td>@b.DiaChi</td><td>@b.Hotline</td>
+                    <td class="text-end text-nowrap">
+                        <button class="btn btn-sm btn-outline-secondary" aria-label="Sửa" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Sửa bưu cục"
+                                data-json="@System.Text.Json.JsonSerializer.Serialize(new { b.MaBuuCuc, b.TenBuuCuc, b.DiaChi, b.Hotline })"><i class="bi bi-pencil"></i></button>
+                        <form class="d-inline" method="post" asp-action="Xoa" asp-route-id="@b.MaBuuCuc" data-confirm="Xóa @b.TenBuuCuc?">
+                            <button class="btn btn-sm btn-outline-danger" aria-label="Xóa"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="m" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><form class="modal-content" method="post" asp-action="Luu">
+    <div class="modal-header"><h2 class="modal-title h5">Bưu cục</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button></div>
+    <div class="modal-body">
+      <input type="hidden" name="MaBuuCuc" value="0" />
+      <div class="mb-3"><label class="form-label">Tên bưu cục</label><input class="form-control" name="TenBuuCuc" maxlength="100" required /></div>
+      <div class="mb-3"><label class="form-label">Địa chỉ</label><input class="form-control" name="DiaChi" maxlength="250" /></div>
+      <div class="mb-1"><label class="form-label">Hotline</label><input class="form-control" name="Hotline" maxlength="15" /></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-ink" data-bs-dismiss="modal">Hủy</button><button class="btn btn-brand" type="submit">Lưu bưu cục</button></div>
+  </form></div>
+</div>

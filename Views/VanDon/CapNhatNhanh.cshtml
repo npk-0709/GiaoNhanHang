@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Cập nhật nhanh";
+    string tt = ViewBag.trangThai as string ?? TT.DangVanChuyen;
+    string vt = ViewBag.viTri as string ?? "";
+}
+<div class="page-head"><h1>Cập nhật trạng thái nhanh</h1></div>
+
+<div class="panel" style="max-width:560px">
+    <p class="text-mut">Đặt con trỏ vào ô mã vận đơn rồi quét mã vạch, hoặc gõ mã bằng tay. Trạng thái và vị trí được giữ lại để quét liên tiếp nhiều đơn.</p>
+    <form method="post" asp-action="CapNhatNhanh">
+        <div class="mb-3">
+            <label class="form-label" for="m">Mã vận đơn</label>
+            <input class="form-control form-control-lg code" id="m" name="maVanDon" autocomplete="off" autofocus required />
+        </div>
+        <div class="row g-2 mb-3">
+            <div class="col-md-5">
+                <label class="form-label" for="tt">Trạng thái</label>
+                <select class="form-select" id="tt" name="trangThai">
+                    @foreach (var t in TT.Tat)
+                    {
+                        <option value="@t" selected="@(t == tt)">@t</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-7">
+                <label class="form-label" for="vt">Vị trí hiện tại</label>
+                <input class="form-control" id="vt" name="viTri" value="@vt" maxlength="250" placeholder="Ví dụ: Kho Bình Dương" required />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="gc">Ghi chú</label>
+            <input class="form-control" id="gc" name="ghiChu" maxlength="250" placeholder="Không bắt buộc" />
+        </div>
+        <button class="btn btn-brand" type="submit">Cập nhật</button>
+    </form>
+</div>

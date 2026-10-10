@@ -1,0 +1,49 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Đăng nhập";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <partial name="_Head" />
+    <title>Đăng nhập - Giao Nhận</title>
+</head>
+<body>
+<div class="login-wrap">
+    <div class="login-side">
+        <a class="brand text-white" asp-controller="Account" asp-action="AdminLogin"><span class="brand-mark"><i class="bi bi-box-seam"></i></span>Giao Nhận</a>
+        <h1>Mỗi vận đơn đều có một hành trình rõ ràng</h1>
+        <div style="color:#9FB0D4">Quản lý vận đơn và điều phối giao nhận hàng hóa</div>
+    </div>
+    <div class="login-form">
+        <form method="post" asp-action="AdminLogin">
+            <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
+            <h2 class="h4 mb-3">Đăng nhập nội bộ</h2>
+            @if (ViewData["loi"] is string loi)
+            {
+                <div class="alert alert-danger py-2" role="alert">@loi</div>
+            }
+            <div class="mb-3">
+                <label class="form-label" for="u">Tên đăng nhập</label>
+                <input class="form-control" id="u" name="tenDangNhap" autocomplete="username" autofocus required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="p">Mật khẩu</label>
+                <input class="form-control" id="p" name="matKhau" type="password" autocomplete="current-password" required />
+            </div>
+            <button class="btn btn-brand w-100" type="submit">Đăng nhập</button>
+            <div class="demo mt-3">
+                Tài khoản mẫu:<br />
+                Quản lý <code>admin</code> / <code>admin123</code><br />
+                Tiếp nhận <code>tiepnhan</code> / <code>123456</code><br />
+                Giao hàng <code>giaohang</code> / <code>123456</code>
+            </div>
+            <hr />
+            <div class="text-center">
+                Bạn là khách hàng? <a asp-action="UserLogin">Đăng nhập tại đây</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

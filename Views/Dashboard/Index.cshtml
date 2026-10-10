@@ -1,0 +1,70 @@
+@model DashboardVM
+@{
+    ViewData["Title"] = "Tổng quan";
+    int tong = Model.TheoTrangThai.Values.Sum();
+}
+<div class="page-head">
+    <h1>Tổng quan</h1>
+    <div class="d-flex gap-2">
+        @if (User.IsInRole("QuanLy") || User.IsInRole("TiepNhan"))
+        {
+            <a class="btn btn-brand" asp-controller="VanDon" asp-action="Create"><i class="bi bi-plus-lg"></i> Lập vận đơn</a>
+        }
+        <a class="btn btn-outline-ink" asp-controller="VanDon" asp-action="CapNhatNhanh"><i class="bi bi-upc-scan"></i> Cập nhật nhanh</a>
+    </div>
+</div>
+
+<div class="kpis">
+    <div class="kpi"><div class="l">Đơn tạo hôm nay</div><div class="v">@Model.DonHomNay</div></div>
+    <div class="kpi"><div class="l">Doanh thu hôm nay</div><div class="v">@Fmt.Tien(Model.DoanhThuHomNay)</div></div>
+    <div class="kpi"><div class="l">Doanh thu tháng này</div><div class="v">@Fmt.Tien(Model.DoanhThuThang)</div></div>
+    <div class="kpi"><div class="l">Giao thành công</div><div class="v">@(Model.TyLeThanhCong is double r ? r + "%" : "Chưa có")</div></div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-5">
+        <div class="panel h-100">
+            <h2>Vận đơn theo trạng thái</h2>
+            <div class="pipe">
+                @foreach (var t in TT.Tat)
+                {
+                    int n = Model.TheoTrangThai.GetValueOrDefault(t);
+                    double pct = tong == 0 ? 0 : 100.0 * n / tong;
+                    <div class="r">
+                        <a class="text-decoration-none" asp-controller="VanDon" asp-action="Index" asp-route-trangThai="@t"><span class="tt @TT.Css(t)">@t</span></a>
+                        <div class="bar @(t == TT.DaGiao ? "ok" : t == TT.Hoan ? "bad" : "")"><i style="width:@pct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture)%"></i></div>
+                        <div class="text-end fw-semibold">@n</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="panel flush h-100">
+            <div class="p-3 pb-2 d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Vận đơn mới nhất</h2>
+                <a asp-controller="VanDon" asp-action="Index">Xem tất cả</a>
+            </div>
+            <div class="table-wrap">
+                <table class="table table-hover">
+                    <thead><tr><th>Mã</th><th>Người nhận</th><th>Cước</th><th>Trạng thái</th></tr></thead>
+                    <tbody>
+                    @foreach (var v in Model.GanDay)
+                    {
+                        <tr>
+                            <td><a class="code" asp-controller="VanDon" asp-action="Details" asp-route-id="@v.MaVanDon">@v.MaVanDon</a></td>
+                            <td>@v.NguoiNhan?.TenKH</td>
+                            <td>@Fmt.Tien(v.TongTien)</td>
+                            <td><span class="tt @TT.Css(v.TrangThai)">@v.TrangThai</span></td>
+                        </tr>
+                    }
+                    @if (!Model.GanDay.Any())
+                    {
+                        <tr><td colspan="4" class="text-center text-mut py-4">Chưa có vận đơn. Bấm “Lập vận đơn” để bắt đầu.</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

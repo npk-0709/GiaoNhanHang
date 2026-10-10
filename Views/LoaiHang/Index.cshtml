@@ -1,0 +1,40 @@
+@model List<LoaiHangHoa>
+@{ ViewData["Title"] = "Loại hàng hóa"; }
+<div class="page-head">
+    <h1>Loại hàng hóa</h1>
+    <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Thêm loại hàng"><i class="bi bi-plus-lg"></i> Thêm loại hàng</button>
+</div>
+<div class="panel flush">
+    <div class="table-wrap">
+        <table class="table table-hover">
+            <thead><tr><th>Mã</th><th>Tên loại hàng</th><th>Hệ số phụ phí</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+            @foreach (var l in Model)
+            {
+                <tr>
+                    <td>@l.MaLoaiHang</td><td class="fw-semibold">@l.TenLoaiHang</td><td>× @Fmt.So(l.HeSoPhuPhi)</td>
+                    <td class="text-end text-nowrap">
+                        <button class="btn btn-sm btn-outline-secondary" aria-label="Sửa" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Sửa loại hàng"
+                                data-json="@System.Text.Json.JsonSerializer.Serialize(new { l.MaLoaiHang, l.TenLoaiHang, l.HeSoPhuPhi })"><i class="bi bi-pencil"></i></button>
+                        <form class="d-inline" method="post" asp-action="Xoa" asp-route-id="@l.MaLoaiHang" data-confirm="Xóa loại hàng @l.TenLoaiHang?">
+                            <button class="btn btn-sm btn-outline-danger" aria-label="Xóa"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="m" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><form class="modal-content" method="post" asp-action="Luu">
+    <div class="modal-header"><h2 class="modal-title h5">Loại hàng</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button></div>
+    <div class="modal-body">
+      <input type="hidden" name="MaLoaiHang" value="0" />
+      <div class="mb-3"><label class="form-label">Tên loại hàng</label><input class="form-control" name="TenLoaiHang" maxlength="100" required /></div>
+      <div class="mb-1"><label class="form-label">Hệ số phụ phí</label><input class="form-control" type="number" step="0.01" min="1" max="10" name="HeSoPhuPhi" value="1" required />
+        <div class="form-text">1 là không phụ phí; hàng dễ vỡ có thể dùng 1.2.</div></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-ink" data-bs-dismiss="modal">Hủy</button><button class="btn btn-brand" type="submit">Lưu loại hàng</button></div>
+  </form></div>
+</div>

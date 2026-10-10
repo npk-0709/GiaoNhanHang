@@ -1,0 +1,19 @@
+@model ItemVM
+@{
+    var loai = (List<LoaiHangHoa>)ViewBag.LoaiHang;
+    var tl = Model.TrongLuong > 0 ? Model.TrongLuong.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+}
+<tr class="item-row">
+    <td>
+        <select class="form-select form-select-sm" data-n="MaLoaiHang" aria-label="Loại hàng">
+            @foreach (var l in loai)
+            {
+                <option value="@l.MaLoaiHang" selected="@(l.MaLoaiHang == Model.MaLoaiHang)">@l.TenLoaiHang (hệ số @Fmt.So(l.HeSoPhuPhi))</option>
+            }
+        </select>
+    </td>
+    <td style="width:90px"><input class="form-control form-control-sm" type="number" min="1" step="1" data-n="SoLuong" value="@Model.SoLuong" aria-label="Số lượng" /></td>
+    <td style="width:130px"><input class="form-control form-control-sm kg" type="number" min="0.01" step="0.01" data-n="TrongLuong" value="@tl" placeholder="kg" aria-label="Trọng lượng (kg)" /></td>
+    <td><input class="form-control form-control-sm" maxlength="250" data-n="GhiChu" value="@Model.GhiChu" placeholder="Mô tả hàng" aria-label="Ghi chú" /></td>
+    <td style="width:44px"><button type="button" class="btn btn-sm btn-outline-secondary btn-del" aria-label="Xóa dòng"><i class="bi bi-x-lg"></i></button></td>
+</tr>

@@ -1,0 +1,48 @@
+@model List<GiaoDichTaiKhoan>
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+}
+<div class="page-head">
+    <h1>Số dư và Thanh toán</h1>
+</div>
+
+<div class="panel mb-4">
+    <h2>Số dư tài khoản</h2>
+    <div class="fs-1 text-brand fw-bold mb-3">@GiaoNhanHang.Helpers.Fmt.Tien(ViewBag.SoDu)</div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-brand">Nạp tiền</button>
+        <button class="btn btn-outline-ink">Rút tiền</button>
+        <button class="btn btn-outline-ink"><i class="bi bi-gear"></i> Cài đặt thanh toán</button>
+    </div>
+</div>
+
+<div class="panel flush">
+    <div class="p-3 border-bottom"><h2 class="mb-0">Thông báo dòng tiền</h2></div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Thời gian</th>
+                <th>Loại giao dịch</th>
+                <th class="text-end">Số tiền</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model)
+            {
+                <tr>
+                    <td>@g.ThoiGian.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@g.LoaiGD</td>
+                    <td class="text-end @(g.SoTien > 0 ? "text-success" : "text-danger")">
+                        @(g.SoTien > 0 ? "+" : "")@GiaoNhanHang.Helpers.Fmt.Tien(g.SoTien)
+                    </td>
+                    <td>@g.GhiChu</td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="4" class="text-center text-mut py-4">Chưa có giao dịch nào.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

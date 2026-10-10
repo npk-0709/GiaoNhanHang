@@ -1,0 +1,55 @@
+@model List<VanDon>
+@{
+    ViewData["Title"] = "Vận đơn";
+    string? q = ViewBag.q as string;
+    string? tt = ViewBag.tt as string;
+}
+<div class="page-head">
+    <h1>Vận đơn</h1>
+    @if (User.IsInRole("QuanLy") || User.IsInRole("TiepNhan"))
+    {
+        <a class="btn btn-brand" asp-action="Create"><i class="bi bi-plus-lg"></i> Lập vận đơn</a>
+    }
+</div>
+
+<form class="panel mb-3 d-flex gap-2 flex-wrap" method="get">
+    <input class="form-control" style="max-width:340px" name="q" value="@q" placeholder="Mã vận đơn, tên hoặc SĐT khách" aria-label="Tìm kiếm" />
+    <select class="form-select" style="max-width:200px" name="trangThai" aria-label="Trạng thái">
+        <option value="">Mọi trạng thái</option>
+        @foreach (var t in TT.Tat)
+        {
+            <option value="@t" selected="@(t == tt)">@t</option>
+        }
+    </select>
+    <button class="btn btn-brand" type="submit">Lọc</button>
+    @if (!string.IsNullOrEmpty(q) || !string.IsNullOrEmpty(tt))
+    {
+        <a class="btn btn-outline-ink" asp-action="Index">Xóa lọc</a>
+    }
+</form>
+
+<div class="panel flush">
+    <div class="table-wrap">
+        <table class="table table-hover">
+            <thead><tr><th>Mã vận đơn</th><th>Người gửi</th><th>Người nhận</th><th>Ngày tạo</th><th>Khối lượng</th><th>Cước phí</th><th>Trạng thái</th></tr></thead>
+            <tbody>
+            @foreach (var v in Model)
+            {
+                <tr>
+                    <td><a class="code fw-semibold" asp-action="Details" asp-route-id="@v.MaVanDon">@v.MaVanDon</a></td>
+                    <td>@v.NguoiGui?.TenKH</td>
+                    <td>@v.NguoiNhan?.TenKH<div class="small text-mut">@v.NguoiNhan?.SoDienThoai</div></td>
+                    <td>@Fmt.Ngay(v.NgayTao)</td>
+                    <td>@Fmt.Kg(v.TrongLuongTong)</td>
+                    <td>@Fmt.Tien(v.TongTien)</td>
+                    <td><span class="tt @TT.Css(v.TrangThai)">@v.TrangThai</span></td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="7" class="text-center text-mut py-4">Không có vận đơn nào khớp bộ lọc.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

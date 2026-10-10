@@ -1,0 +1,44 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Thống kê đơn hàng";
+}
+<div class="page-head">
+    <h1>Thống kê đơn hàng</h1>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Đang xử lý</h3>
+            <div class="fs-1 text-primary fw-bold">@Model.DangXuLy</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Đã giao thành công</h3>
+            <div class="fs-1 text-success fw-bold">@Model.DaGiao</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Trạng thái ngoại lệ (Hoàn/Hỏng)</h3>
+            <div class="fs-1 text-danger fw-bold">@Model.NgoaiLe</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="panel">
+            <h2>Thống kê tháng này</h2>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span>Tổng số đơn tháng</span>
+                <strong>@Model.TongSoDonThang</strong>
+            </div>
+            <div class="d-flex justify-content-between py-2">
+                <span>Tổng doanh thu tháng</span>
+                <strong class="text-brand">@GiaoNhanHang.Helpers.Fmt.Tien((decimal)Model.DoanhThuThang)</strong>
+            </div>
+        </div>
+    </div>
+</div>

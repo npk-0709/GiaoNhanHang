@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Tạo nhiều đơn hàng";
+}
+<div class="page-head">
+    <h1>Tạo nhiều đơn hàng (Bulk Upload)</h1>
+</div>
+
+<div class="panel">
+    <p>Tải lên file Excel để tạo nhiều đơn hàng cùng lúc. Vui lòng tải <a href="~/files/Mau_TaoNhieuDon.xlsx">File mẫu Excel tại đây</a>.</p>
+    <p class="text-mut small mb-4">Các cột bắt buộc: Người nhận, SĐT nhận, Địa chỉ nhận, Khối lượng (kg). Các cột tùy chọn: Giá trị bưu gửi, COD, Loại dịch vụ (TieuChuan, TietKiem, HoaToc).</p>
+    
+    <form method="post" asp-action="TaoNhieuDon" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Chọn file Excel (.xlsx)</label>
+            <input class="form-control" type="file" name="file" accept=".xlsx" required />
+        </div>
+        <button class="btn btn-brand" type="submit"><i class="bi bi-upload"></i> Tải lên và Tạo đơn</button>
+    </form>
+</div>

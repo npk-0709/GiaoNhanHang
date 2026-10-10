@@ -1,0 +1,64 @@
+@model KhachHang
+@{
+    ViewData["Title"] = "Hồ sơ của Shop";
+}
+<div class="page-head">
+    <h1>Hồ sơ cửa hàng / Người dùng</h1>
+</div>
+
+<div class="panel" style="max-width: 600px;">
+    <form method="post" asp-action="HoSo">
+        <div class="mb-3">
+            <label class="form-label">Tên người dùng / Cửa hàng</label>
+            <input class="form-control" name="tenKH" value="@Model.TenKH" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input class="form-control" name="soDienThoai" value="@Model.SoDienThoai" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" name="email" value="@Model.Email" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <textarea class="form-control" name="diaChi" rows="2">@Model.DiaChi</textarea>
+        </div>
+        <div class="mb-3">
+            <button type="button" class="btn btn-outline-brand" data-bs-toggle="modal" data-bs-target="#doiMatKhauModal">Đổi mật khẩu</button>
+        </div>
+        <button class="btn btn-brand" type="submit">Lưu hồ sơ</button>
+    </form>
+</div>
+
+<!-- Modal Đổi Mật Khẩu -->
+<div class="modal fade" id="doiMatKhauModal" tabindex="-1" aria-labelledby="doiMatKhauModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="DoiMatKhau">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doiMatKhauModalLabel">Đổi Mật Khẩu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu cũ</label>
+                        <input class="form-control" type="password" name="matKhauCu" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu mới</label>
+                        <input class="form-control" type="password" name="matKhauMoi" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nhập lại mật khẩu mới</label>
+                        <input class="form-control" type="password" name="nhapLai" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-brand">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

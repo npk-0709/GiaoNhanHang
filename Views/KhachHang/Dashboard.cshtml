@@ -1,0 +1,95 @@
+@model List<VanDon>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Trung tâm Người bán";
+}
+<div class="page-head">
+    <h1>Quản lý vận đơn của bạn</h1>
+    <div>
+        <a class="btn btn-outline-brand me-2" asp-action="XuatExcel"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</a>
+        <a class="btn btn-brand" asp-action="TaoDon"><i class="bi bi-plus-lg"></i> Tạo đơn mới</a>
+    </div>
+</div>
+
+<div class="panel flush">
+    <div class="p-3 border-bottom bg-light">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-auto">
+                <input type="text" name="q" value="@ViewBag.q" class="form-control" placeholder="Mã VĐ, Tên, SĐT..." />
+            </div>
+            <div class="col-auto">
+                <select name="trangThai" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    @foreach (var tt in ViewBag.TrangThaiList)
+                    {
+                        if (ViewBag.trangThai == tt)
+                        {
+                            <option value="@tt" selected>@tt</option>
+                        }
+                        else
+                        {
+                            <option value="@tt">@tt</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-ink"><i class="bi bi-search"></i> Tìm kiếm</button>
+            </div>
+            @if (!string.IsNullOrEmpty(ViewBag.q) || !string.IsNullOrEmpty(ViewBag.trangThai))
+            {
+                <div class="col-auto">
+                    <a asp-action="Dashboard" class="btn btn-outline-mut">Bỏ lọc</a>
+                </div>
+            }
+        </form>
+    </div>
+    <div class="table-wrap">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Mã VĐ</th>
+                    <th>Ngày tạo</th>
+                    <th>Người nhận</th>
+                    <th>Dịch vụ</th>
+                    <th>Cước phí / COD</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td><strong>@v.MaVanDon</strong></td>
+                        <td>@v.NgayTao.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div>@v.NguoiNhan?.TenKH</div>
+                            <small class="text-mut">@v.NguoiNhan?.SoDienThoai</small>
+                        </td>
+                        <td>@v.LoaiDichVu</td>
+                        <td>
+                            <div>@GiaoNhanHang.Helpers.Fmt.Tien(v.TongTien)</div>
+                            @if(v.ThuCOD > 0) { <small class="text-mut">COD: @GiaoNhanHang.Helpers.Fmt.Tien(v.ThuCOD)</small> }
+                        </td>
+                        <td>
+                            <span class="badge @GiaoNhanHang.Helpers.TT.Css(v.TrangThai)">@v.TrangThai</span>
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-ink" asp-action="ChiTiet" asp-route-id="@v.MaVanDon" title="Tra cứu">Tra cứu</a>
+                            <a class="btn btn-sm btn-outline-ink" asp-action="InDon" asp-route-id="@v.MaVanDon" target="_blank" title="In đơn"><i class="bi bi-printer"></i></a>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-mut py-5">
+                            Bạn chưa có vận đơn nào. <a asp-action="TaoDon">Tạo đơn ngay!</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

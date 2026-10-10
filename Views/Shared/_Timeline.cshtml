@@ -1,0 +1,20 @@
+@model IEnumerable<HanhTrinhGiaoHang>
+@{
+    var ds = Model.OrderByDescending(h => h.ThoiGianCapNhat).ThenByDescending(h => h.MaHanhTrinh).ToList();
+    bool showNv = ViewData["showNv"] is true;
+}
+<ul class="tl">
+    @for (int i = 0; i < ds.Count; i++)
+    {
+        var h = ds[i];
+        var cls = i == 0 && h.TrangThai == TT.DaGiao ? "final-ok" : i == 0 && h.TrangThai == TT.Hoan ? "final-bad" : "";
+        <li class="@cls">
+            <div><span class="tt @TT.Css(h.TrangThai)">@h.TrangThai</span> <span class="fw-semibold ms-1">@h.ViTri</span></div>
+            @if (!string.IsNullOrWhiteSpace(h.TrangThaiChiTiet))
+            {
+                <div>@h.TrangThaiChiTiet</div>
+            }
+            <div class="when">@Fmt.Ngay(h.ThoiGianCapNhat)@(showNv && h.NhanVien != null ? " · " + h.NhanVien.TenNV : "")</div>
+        </li>
+    }
+</ul>

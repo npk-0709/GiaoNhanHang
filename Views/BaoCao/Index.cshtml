@@ -1,0 +1,66 @@
+@model BaoCaoVM
+@{
+    ViewData["Title"] = "Báo cáo";
+    var inv = System.Globalization.CultureInfo.InvariantCulture;
+    decimal maxDt = Model.TheoNgay.Count == 0 ? 1 : Math.Max(1, Model.TheoNgay.Max(x => x.DoanhThu));
+    int maxNv = Model.TheoNhanVien.Count == 0 ? 1 : Math.Max(1, Model.TheoNhanVien.Max(x => x.DaGiao + x.Hoan));
+}
+<div class="page-head">
+    <h1>Báo cáo thống kê</h1>
+    <form class="d-flex gap-2 align-items-end flex-wrap" method="get">
+        <div><label class="form-label mb-0 small" for="tu">Từ ngày</label><input class="form-control" type="date" id="tu" name="tu" value="@Model.Tu.ToString("yyyy-MM-dd")" /></div>
+        <div><label class="form-label mb-0 small" for="den">Đến ngày</label><input class="form-control" type="date" id="den" name="den" value="@Model.Den.ToString("yyyy-MM-dd")" /></div>
+        <button class="btn btn-brand" type="submit">Xem báo cáo</button>
+    </form>
+</div>
+
+<div class="kpis">
+    <div class="kpi"><div class="l">Tổng vận đơn</div><div class="v">@Model.TongDon</div></div>
+    <div class="kpi"><div class="l">Doanh thu (không tính hoàn)</div><div class="v">@Fmt.Tien(Model.TongDoanhThu)</div></div>
+    <div class="kpi"><div class="l">Đã giao · Hoàn · Đang xử lý</div><div class="v">@Model.DaGiao · @Model.Hoan · @Model.DangXuLy</div></div>
+    <div class="kpi"><div class="l">Tỷ lệ giao thành công</div><div class="v">@(Model.TyLeThanhCong is double r ? r + "%" : "Chưa có")</div></div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="panel flush">
+            <div class="p-3 pb-2"><h2 class="mb-0">Doanh thu theo ngày</h2></div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead><tr><th>Ngày</th><th>Số đơn</th><th>Doanh thu</th><th style="width:34%"></th></tr></thead>
+                    <tbody>
+                    @foreach (var d in Model.TheoNgay)
+                    {
+                        <tr>
+                            <td>@Fmt.NgayNgan(d.Ngay)</td><td>@d.SoDon</td><td>@Fmt.Tien(d.DoanhThu)</td>
+                            <td><div class="bar"><i style="width:@(((double)(d.DoanhThu / maxDt * 100)).ToString("0.#", inv))%"></i></div></td>
+                        </tr>
+                    }
+                    @if (Model.TheoNgay.Count == 0) { <tr><td colspan="4" class="text-center text-mut py-4">Không có vận đơn trong khoảng ngày đã chọn.</td></tr> }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel">
+            <h2>Hiệu suất giao hàng theo nhân viên</h2>
+            @if (Model.TheoNhanVien.Count == 0)
+            {
+                <div class="text-mut">Chưa có đơn giao thành công hoặc hoàn trong khoảng này.</div>
+            }
+            <div class="pipe">
+            @foreach (var n in Model.TheoNhanVien)
+            {
+                <div>
+                    <div class="d-flex justify-content-between"><span class="fw-semibold">@n.Ten</span><span class="small text-mut">Giao @n.DaGiao · Hoàn @n.Hoan</span></div>
+                    <div class="d-flex gap-1 mt-1">
+                        <div class="bar ok" style="width:@((100.0 * n.DaGiao / maxNv).ToString("0.#", inv))%"><i style="width:100%"></i></div>
+                        <div class="bar bad" style="width:@((100.0 * n.Hoan / maxNv).ToString("0.#", inv))%"><i style="width:100%"></i></div>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+</div>

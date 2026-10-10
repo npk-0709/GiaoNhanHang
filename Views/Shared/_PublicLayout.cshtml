@@ -1,0 +1,38 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <partial name="_Head" />
+    <title>@ViewData["Title"] - Giao Nhận</title>
+</head>
+<body>
+<header class="pub-nav">
+    <div class="wrap">
+        <a class="brand" asp-controller="Home" asp-action="Index"><span class="brand-mark"><i class="bi bi-box-seam"></i></span>Giao Nhận</a>
+        <nav class="links">
+            <a asp-controller="Home" asp-action="Index" asp-fragment="quy-trinh">Quy trình</a>
+            <a asp-controller="Home" asp-action="Index" asp-fragment="chuc-nang">Chức năng</a>
+            <a asp-controller="Home" asp-action="Index" asp-fragment="tra-cuu">Tra cứu vận đơn</a>
+        </nav>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a class="btn btn-brand" asp-controller="Dashboard" asp-action="Index">Vào hệ thống</a>
+        }
+        else
+        {
+            <a class="btn btn-brand" asp-controller="Account" asp-action="UserLogin">Đăng nhập</a>
+        }
+    </div>
+</header>
+@RenderBody()
+<footer class="pub-foot">
+    <div class="wrap d-flex justify-content-between flex-wrap gap-2">
+        <span>Giao Nhận · Bài tập lớn: Quản lý vận đơn và điều phối giao nhận hàng hóa</span>
+        <span>Xây dựng bằng ASP.NET Core MVC và SQL Server</span>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

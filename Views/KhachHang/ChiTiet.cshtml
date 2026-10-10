@@ -1,0 +1,83 @@
+@model VanDon
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng - " + Model.MaVanDon;
+}
+<div class="page-head">
+    <h1>Chi tiết & Tra cứu đơn: @Model.MaVanDon</h1>
+    <a asp-action="Dashboard">Quay lại quản lý vận đơn</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="panel mb-4">
+            <div class="d-flex justify-content-between mb-3">
+                <h2 class="mb-0">Hành trình giao hàng</h2>
+                <span class="badge @GiaoNhanHang.Helpers.TT.Css(Model.TrangThai)">@Model.TrangThai</span>
+            </div>
+            @if (Model.HanhTrinh.Any())
+            {
+                <ul class="route mt-4">
+                    @foreach (var h in Model.HanhTrinh.OrderByDescending(x => x.ThoiGianCapNhat))
+                    {
+                        <li>
+                            <div>
+                                <div class="fw-bold">@h.TrangThai</div>
+                                <div class="text-mut">@h.ViTri @(h.NhanVien != null ? " - NV: " + h.NhanVien.TenNV : "")</div>
+                                @if (!string.IsNullOrEmpty(h.TrangThaiChiTiet)) { <div class="small text-brand">@h.TrangThaiChiTiet</div> }
+                                <small>@h.ThoiGianCapNhat.ToString("dd/MM/yyyy HH:mm")</small>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="text-mut py-3 text-center">Chưa có thông tin hành trình.</div>
+            }
+        </div>
+        
+        <div class="panel">
+            <h2>Hàng hóa</h2>
+            <table class="table table-hover mt-3">
+                <thead>
+                    <tr><th>Loại hàng</th><th>Số lượng</th><th>Trọng lượng</th><th>Ghi chú</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.ChiTiet)
+                    {
+                        <tr>
+                            <td>@c.LoaiHangHoa?.TenLoaiHang</td>
+                            <td>@c.SoLuong</td>
+                            <td>@c.TrongLuong kg</td>
+                            <td>@c.GhiChu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="panel mb-4">
+            <h2>Thông tin người nhận</h2>
+            <div class="mt-3">
+                <div class="fw-bold fs-5">@Model.NguoiNhan?.TenKH</div>
+                <div><i class="bi bi-telephone text-mut me-2"></i> @Model.NguoiNhan?.SoDienThoai</div>
+                <div><i class="bi bi-geo-alt text-mut me-2"></i> @Model.NguoiNhan?.DiaChi</div>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>Chi tiết cước</h2>
+            <dl class="kv mt-3">
+                <dt>Dịch vụ</dt><dd>@Model.LoaiDichVu</dd>
+                <dt>Tổng trọng lượng</dt><dd>@Model.TrongLuongTong kg</dd>
+                <dt>Thu hộ (COD)</dt><dd class="fw-bold">@GiaoNhanHang.Helpers.Fmt.Tien(Model.ThuCOD)</dd>
+                <dt>Cước phí</dt><dd>@GiaoNhanHang.Helpers.Fmt.Tien(Model.TongTien)</dd>
+                <dt>Người trả cước</dt><dd>@(Model.NguoiTraCuoc == "NguoiGui" ? "Người gửi" : "Người nhận")</dd>
+            </dl>
+        </div>
+        <div class="mt-3">
+            <a class="btn btn-brand w-100" asp-action="InDon" asp-route-id="@Model.MaVanDon" target="_blank"><i class="bi bi-printer"></i> In phiếu gửi hàng</a>
+        </div>
+    </div>
+</div>

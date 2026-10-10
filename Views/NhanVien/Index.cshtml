@@ -1,0 +1,61 @@
+@model List<NhanVien>
+@{
+    ViewData["Title"] = "Nhân viên";
+    var bc = (List<BuuCuc>)ViewBag.BuuCuc;
+    string VaiTro(string v) => v == "QuanLy" ? "Quản lý" : v == "TiepNhan" ? "Tiếp nhận" : "Giao hàng";
+}
+<div class="page-head">
+    <h1>Nhân viên</h1>
+    <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Thêm nhân viên"><i class="bi bi-plus-lg"></i> Thêm nhân viên</button>
+</div>
+
+<div class="panel flush">
+    <div class="table-wrap">
+        <table class="table table-hover">
+            <thead><tr><th>Mã</th><th>Họ tên</th><th>Chức vụ</th><th>Bưu cục</th><th>Tài khoản</th><th>Vai trò</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+            @foreach (var n in Model)
+            {
+                <tr>
+                    <td>@n.MaNV</td>
+                    <td class="fw-semibold">@n.TenNV<div class="small text-mut fw-normal">@n.SoDienThoai</div></td>
+                    <td>@n.ChucVu</td><td>@n.BuuCuc?.TenBuuCuc</td><td class="code">@n.TenDangNhap</td><td>@VaiTro(n.VaiTro)</td>
+                    <td class="text-end text-nowrap">
+                        <button class="btn btn-sm btn-outline-secondary" aria-label="Sửa" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Sửa nhân viên"
+                                data-json="@System.Text.Json.JsonSerializer.Serialize(new { n.MaNV, n.TenNV, n.ChucVu, n.SoDienThoai, n.MaBuuCuc, n.TenDangNhap, n.VaiTro })"><i class="bi bi-pencil"></i></button>
+                        <form class="d-inline" method="post" asp-action="Xoa" asp-route-id="@n.MaNV" data-confirm="Xóa nhân viên @n.TenNV?">
+                            <button class="btn btn-sm btn-outline-danger" aria-label="Xóa"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="m" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><form class="modal-content" method="post" asp-action="Luu">
+    <div class="modal-header"><h2 class="modal-title h5">Nhân viên</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button></div>
+    <div class="modal-body">
+      <input type="hidden" name="MaNV" value="0" />
+      <div class="row g-3">
+        <div class="col-md-7"><label class="form-label">Họ tên</label><input class="form-control" name="TenNV" maxlength="100" required /></div>
+        <div class="col-md-5"><label class="form-label">Số điện thoại</label><input class="form-control" name="SoDienThoai" maxlength="15" /></div>
+        <div class="col-md-6"><label class="form-label">Chức vụ</label><input class="form-control" name="ChucVu" maxlength="50" required /></div>
+        <div class="col-md-6"><label class="form-label">Bưu cục làm việc</label>
+          <select class="form-select" name="MaBuuCuc"><option value="">Chưa phân bổ</option>
+            @foreach (var b in bc) { <option value="@b.MaBuuCuc">@b.TenBuuCuc</option> }
+          </select></div>
+        <div class="col-md-6"><label class="form-label">Tên đăng nhập</label><input class="form-control" name="TenDangNhap" maxlength="50" autocomplete="off" required /></div>
+        <div class="col-md-6"><label class="form-label">Vai trò</label>
+          <select class="form-select" name="VaiTro">
+            <option value="TiepNhan">Tiếp nhận</option><option value="GiaoHang">Giao hàng</option><option value="QuanLy">Quản lý</option>
+          </select></div>
+        <div class="col-12"><label class="form-label">Mật khẩu</label><input class="form-control" type="password" name="MatKhau" autocomplete="new-password" placeholder="Để trống nếu không đổi" />
+          <div class="form-text">Nhân viên mới bắt buộc nhập, tối thiểu 6 ký tự.</div></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-ink" data-bs-dismiss="modal">Hủy</button><button class="btn btn-brand" type="submit">Lưu nhân viên</button></div>
+  </form></div>
+</div>

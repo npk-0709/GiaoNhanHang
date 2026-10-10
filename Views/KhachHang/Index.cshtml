@@ -1,0 +1,51 @@
+@model List<KhachHang>
+@{
+    ViewData["Title"] = "Khách hàng";
+    string? q = ViewBag.q as string;
+}
+<div class="page-head">
+    <h1>Khách hàng</h1>
+</div>
+
+<form class="panel mb-3 d-flex gap-2" method="get">
+    <input class="form-control" style="max-width:340px" name="q" value="@q" placeholder="Tìm theo tên hoặc số điện thoại" aria-label="Tìm kiếm" />
+    <button class="btn btn-brand" type="submit">Tìm</button>
+    @if (!string.IsNullOrEmpty(q)) { <a class="btn btn-outline-ink" asp-action="Index">Xóa lọc</a> }
+</form>
+
+<div class="panel flush">
+    <div class="table-wrap">
+        <table class="table table-hover">
+            <thead><tr><th>Mã</th><th>Tên khách hàng</th><th>Số điện thoại</th><th>Địa chỉ</th><th style="width:110px"></th></tr></thead>
+            <tbody>
+            @foreach (var k in Model)
+            {
+                <tr>
+                    <td>@k.MaKH</td><td class="fw-semibold">@k.TenKH</td><td>@k.SoDienThoai</td><td>@k.DiaChi</td>
+                    <td class="text-end text-nowrap">
+                        <button class="btn btn-sm btn-outline-secondary" aria-label="Sửa" data-bs-toggle="modal" data-bs-target="#m" data-modal="#m" data-title="Sửa khách hàng"
+                                data-json="@System.Text.Json.JsonSerializer.Serialize(new { k.MaKH, k.TenKH, k.SoDienThoai, k.DiaChi })"><i class="bi bi-pencil"></i></button>
+                        <form class="d-inline" method="post" asp-action="Xoa" asp-route-id="@k.MaKH" data-confirm="Xóa khách hàng @k.TenKH?">
+                            <button class="btn btn-sm btn-outline-danger" aria-label="Xóa"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (Model.Count == 0) { <tr><td colspan="5" class="text-center text-mut py-4">Chưa có khách hàng nào.</td></tr> }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="m" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><form class="modal-content" method="post" asp-action="Luu">
+    <div class="modal-header"><h2 class="modal-title h5">Khách hàng</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button></div>
+    <div class="modal-body">
+      <input type="hidden" name="MaKH" value="0" />
+      <div class="mb-3"><label class="form-label">Tên khách hàng</label><input class="form-control" name="TenKH" maxlength="100" required /></div>
+      <div class="mb-3"><label class="form-label">Số điện thoại</label><input class="form-control" name="SoDienThoai" maxlength="15" required /></div>
+      <div class="mb-1"><label class="form-label">Địa chỉ</label><input class="form-control" name="DiaChi" maxlength="250" /></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-outline-ink" data-bs-dismiss="modal">Hủy</button><button class="btn btn-brand" type="submit">Lưu khách hàng</button></div>
+  </form></div>
+</div>

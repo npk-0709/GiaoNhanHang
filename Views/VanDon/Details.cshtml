@@ -1,0 +1,91 @@
+@model VanDon
+@{
+    ViewData["Title"] = "Vận đơn " + Model.MaVanDon;
+    ViewData["showNv"] = true;
+    bool daXong = TT.Cuoi(Model.TrangThai);
+}
+<div class="page-head">
+    <div>
+        <a class="small" asp-action="Index">← Danh sách vận đơn</a>
+        <h1 class="code mt-1">@Model.MaVanDon</h1>
+    </div>
+    <span class="tt @TT.Css(Model.TrangThai)" style="font-size:.95rem">@Model.TrangThai</span>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="panel mb-3">
+            <h2>Thông tin vận đơn</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="text-mut small mb-1">Người gửi</div>
+                    <div class="fw-semibold">@Model.NguoiGui?.TenKH</div>
+                    <div>@Model.NguoiGui?.SoDienThoai</div>
+                    <div class="small text-mut">@Model.NguoiGui?.DiaChi</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-mut small mb-1">Người nhận</div>
+                    <div class="fw-semibold">@Model.NguoiNhan?.TenKH</div>
+                    <div>@Model.NguoiNhan?.SoDienThoai</div>
+                    <div class="small text-mut">@Model.NguoiNhan?.DiaChi</div>
+                </div>
+            </div>
+            <hr />
+            <dl class="kv">
+                <dt>Ngày tạo</dt><dd>@Fmt.Ngay(Model.NgayTao)</dd>
+                <dt>Nhân viên nhận</dt><dd>@Model.NhanVienTiepNhan?.TenNV</dd>
+                <dt>Bậc giá</dt><dd>@(Model.BangGia == null ? "Không có" : Fmt.So(Model.BangGia.KhoiLuongTu) + " – " + Fmt.So(Model.BangGia.KhoiLuongDen) + " kg")</dd>
+                <dt>Tổng khối lượng</dt><dd>@Fmt.Kg(Model.TrongLuongTong)</dd>
+                <dt>Cước phí</dt><dd class="fw-bold">@Fmt.Tien(Model.TongTien)</dd>
+            </dl>
+        </div>
+
+        <div class="panel flush">
+            <div class="p-3 pb-2"><h2 class="mb-0">Hàng hóa</h2></div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead><tr><th>Loại hàng</th><th>Số lượng</th><th>Trọng lượng</th><th>Ghi chú</th></tr></thead>
+                    <tbody>
+                    @foreach (var c in Model.ChiTiet)
+                    {
+                        <tr><td>@c.LoaiHangHoa?.TenLoaiHang</td><td>@c.SoLuong</td><td>@Fmt.Kg(c.TrongLuong)</td><td>@c.GhiChu</td></tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        @if (!daXong)
+        {
+            <div class="panel mb-3">
+                <h2>Cập nhật hành trình</h2>
+                <form method="post" asp-action="CapNhat" asp-route-id="@Model.MaVanDon">
+                    <div class="mb-2">
+                        <label class="form-label" for="tt">Trạng thái mới</label>
+                        <select class="form-select" id="tt" name="trangThai">
+                            @foreach (var t in TT.Tat)
+                            {
+                                <option value="@t" selected="@(t == Model.TrangThai)">@t</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" for="vt">Vị trí hiện tại</label>
+                        <input class="form-control" id="vt" name="viTri" maxlength="250" placeholder="Ví dụ: Bưu cục Thủ Đức" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="gc">Ghi chú</label>
+                        <input class="form-control" id="gc" name="ghiChu" maxlength="250" placeholder="Không bắt buộc" />
+                    </div>
+                    <button class="btn btn-brand w-100" type="submit">Cập nhật trạng thái</button>
+                </form>
+            </div>
+        }
+        <div class="panel">
+            <h2>Hành trình giao hàng</h2>
+            <partial name="_Timeline" model="Model.HanhTrinh" />
+        </div>
+    </div>
+</div>

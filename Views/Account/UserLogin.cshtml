@@ -1,0 +1,57 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Seller Center - Đăng nhập";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <partial name="_Head" />
+    <title>Đăng nhập Trung tâm Người bán - Giao Nhận</title>
+</head>
+<body>
+<div class="login-wrap">
+    <div class="login-side" style="background: var(--brand);">
+        <a class="brand text-white" asp-controller="Account" asp-action="UserLogin">
+            <span class="brand-mark" style="background: #fff; color: var(--brand);"><i class="bi bi-box-seam"></i></span>Giao Nhận Express
+        </a>
+        <h1>Nền tảng quản lý vận đơn và điều phối giao nhận</h1>
+        <div style="color:var(--brand-l); font-size: 1.1rem; margin-top: 10px;">
+            Đăng nhập ngay để bắt đầu tạo đơn và trải nghiệm dịch vụ của chúng tôi.
+        </div>
+    </div>
+    <div class="login-form">
+        <form method="post" asp-action="UserLogin" style="max-width: 400px; width: 100%;">
+            <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
+            <h2 class="h4 mb-4 text-center">Đăng nhập Khách hàng</h2>
+            @if (ViewData["loi"] is string loi)
+            {
+                <div class="alert alert-danger py-2" role="alert">@loi</div>
+            }
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập / Số điện thoại</label>
+                <input class="form-control" name="tenDangNhap" required autofocus />
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Mật khẩu</label>
+                <input class="form-control" name="matKhau" type="password" required />
+            </div>
+            <button class="btn btn-brand w-100 btn-lg" type="submit">Đăng nhập</button>
+            
+            <div class="mt-3 text-center">
+                Chưa có tài khoản? <a asp-action="Register">Đăng ký ngay</a>
+            </div>
+
+            <div class="demo mt-4">
+                Tài khoản mẫu khách hàng:<br />
+                <code>moclam</code> / <code>123456</code><br />
+                <code>hoanguyen</code> / <code>123456</code>
+            </div>
+            
+            <div class="mt-4 text-center text-mut small border-top pt-3">
+                Nhân viên nội bộ? <a asp-controller="Account" asp-action="AdminLogin">Đăng nhập tại đây</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

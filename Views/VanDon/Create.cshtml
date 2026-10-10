@@ -1,0 +1,129 @@
+@model VanDonCreateVM
+@{
+    ViewData["Title"] = "Lập vận đơn";
+    var kh = (List<KhachHang>)ViewBag.KhachHang;
+}
+<div class="page-head">
+    <h1>Lập vận đơn nhận hàng</h1>
+    <a asp-controller="KhachHang" asp-action="Index">Thêm khách hàng mới</a>
+</div>
+
+<form method="post" asp-action="Create" id="frm">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0 ps-3">
+                @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@e.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <div class="panel mb-3">
+                <h2>Người gửi và người nhận</h2>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="g">Người gửi</label>
+                        <select class="form-select" id="g" name="MaKH_Gui">
+                            <option value="0">Chọn khách hàng</option>
+                            @foreach (var k in kh)
+                            {
+                                <option value="@k.MaKH" selected="@(k.MaKH == Model.MaKH_Gui)">@k.TenKH · @k.SoDienThoai</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="n">Người nhận</label>
+                        <select class="form-select" id="n" name="MaKH_Nhan">
+                            <option value="0">Chọn khách hàng</option>
+                            @foreach (var k in kh)
+                            {
+                                <option value="@k.MaKH" selected="@(k.MaKH == Model.MaKH_Nhan)">@k.TenKH · @k.SoDienThoai</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="mb-0">Hàng hóa</h2>
+                    <button type="button" class="btn btn-sm btn-outline-ink" id="addRow"><i class="bi bi-plus-lg"></i> Thêm mặt hàng</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead><tr><th>Loại hàng</th><th>Số lượng</th><th>Trọng lượng (kg)</th><th>Ghi chú</th><th></th></tr></thead>
+                        <tbody id="rows">
+                            @foreach (var it in Model.Items)
+                            {
+                                <partial name="_ItemRow" model="it" />
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="small text-mut">Trọng lượng là tổng khối lượng của dòng hàng đó.</div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="fee mb-3" aria-live="polite">
+                <div class="text-mut small">Cước phí tạm tính</div>
+                <div class="big" id="fee">0 ₫</div>
+                <div class="small text-mut" id="feeNote">Nhập trọng lượng để tính cước.</div>
+            </div>
+            <button class="btn btn-brand w-100 btn-lg" type="submit">Lập vận đơn</button>
+        </div>
+    </div>
+</form>
+
+<template id="rowTpl"><partial name="_ItemRow" model="new ItemVM()" /></template>
+
+@section Scripts {
+<script>
+(function () {
+  var rows = document.getElementById('rows');
+  var tpl = document.getElementById('rowTpl');
+  var timer;
+
+  function reindex() {
+    rows.querySelectorAll('tr.item-row').forEach(function (tr, i) {
+      tr.querySelectorAll('[data-n]').forEach(function (el) { el.name = 'Items[' + i + '].' + el.dataset.n; });
+    });
+  }
+  function estimate() {
+    clearTimeout(timer);
+    timer = setTimeout(async function () {
+      var kg = 0, ids = [];
+      rows.querySelectorAll('tr.item-row').forEach(function (tr) {
+        var w = parseFloat(tr.querySelector('.kg').value);
+        if (w > 0) kg += w;
+        ids.push(tr.querySelector('select').value);
+      });
+      var fee = document.getElementById('fee'), note = document.getElementById('feeNote');
+      if (kg <= 0) { fee.textContent = '0 ₫'; note.textContent = 'Nhập trọng lượng để tính cước.'; return; }
+      try {
+        var r = await fetch('/VanDon/TinhCuoc?kg=' + kg + '&loai=' + ids.join(','));
+        var d = await r.json();
+        fee.textContent = new Intl.NumberFormat('vi-VN').format(d.tien) + ' ₫';
+        note.textContent = 'Tổng ' + kg.toFixed(2).replace(/\.?0+$/, '') + ' kg' + (d.bac ? ' · bậc giá ' + d.bac : '');
+      } catch (e) { note.textContent = 'Không tính được cước, thử lại sau.'; }
+    }, 250);
+  }
+  document.getElementById('addRow').addEventListener('click', function () {
+    rows.appendChild(tpl.content.cloneNode(true));
+    reindex(); estimate();
+  });
+  rows.addEventListener('click', function (e) {
+    var b = e.target.closest('.btn-del');
+    if (!b) return;
+    if (rows.querySelectorAll('tr.item-row').length > 1) { b.closest('tr').remove(); reindex(); estimate(); }
+  });
+  rows.addEventListener('input', estimate);
+  rows.addEventListener('change', estimate);
+  reindex(); estimate();
+})();
+</script>
+}

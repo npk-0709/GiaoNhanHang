@@ -1,0 +1,263 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\khachhang\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\khachhang\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\giaonhanhang.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:giaonhanhang.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:controllers\\khachhangcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\khachhang\\taonhieudon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\khachhang\\taonhieudon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\khachhang\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\khachhang\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\khachhang\\taodon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\khachhang\\taodon.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\database\\giaonhanhang.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:database\\giaonhanhang.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ChiTiet.cshtml",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\ChiTiet.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\ChiTiet.cshtml",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\ChiTiet.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\ChiTiet.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T18:31:36.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\AccessDenied.cshtml",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeToolTip": "Views\\Account\\AccessDenied.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T18:24:24.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GiaoNhanHang.csproj",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\GiaoNhanHang.csproj",
+              "RelativeDocumentMoniker": "GiaoNhanHang.csproj",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\GiaoNhanHang.csproj",
+              "RelativeToolTip": "GiaoNhanHang.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-09T18:19:04.5Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "KhachHangController.cs",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\KhachHangController.cs",
+              "RelativeDocumentMoniker": "Controllers\\KhachHangController.cs",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\KhachHangController.cs",
+              "RelativeToolTip": "Controllers\\KhachHangController.cs",
+              "ViewState": "AgIAANYAAAAAAAAAAIAwwNcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T18:17:26.813Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TaoNhieuDon.cshtml",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoNhieuDon.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\TaoNhieuDon.cshtml",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoNhieuDon.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\TaoNhieuDon.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T18:16:26.151Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Microsoft.PackageDependencyResolution.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "ViewState": "AgIAAPcAAAAAAAAAAAAuwBABAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-10-09T18:10:35.18Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\Index.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\Index.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T17:56:30.759Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TaoDon.cshtml",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoDon.cshtml",
+              "RelativeDocumentMoniker": "Views\\KhachHang\\TaoDon.cshtml",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoDon.cshtml",
+              "RelativeToolTip": "Views\\KhachHang\\TaoDon.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABkAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-09T17:48:59.45Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Helpers.cs",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Helpers\\Helpers.cs",
+              "RelativeDocumentMoniker": "Helpers\\Helpers.cs",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Helpers\\Helpers.cs",
+              "RelativeToolTip": "Helpers\\Helpers.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAqwDgAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T17:04:59.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAgwDMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T17:02:31.987Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "GiaoNhanHang.sql",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Database\\GiaoNhanHang.sql",
+              "RelativeDocumentMoniker": "Database\\GiaoNhanHang.sql",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Database\\GiaoNhanHang.sql",
+              "RelativeToolTip": "Database\\GiaoNhanHang.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-10-09T16:59:58.434Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T16:57:19.289Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACUAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T16:56:48.988Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-10-09T16:56:49.899Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-09T16:56:47.807Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

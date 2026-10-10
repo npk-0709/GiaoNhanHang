@@ -1,0 +1,115 @@
+@model VanDon
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>In Đơn - @Model.MaVanDon</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; font-size: 14px; margin: 0; padding: 20px; color: #000; }
+        .waybill { width: 100%; max-width: 800px; margin: 0 auto; border: 2px solid #000; padding: 20px; }
+        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; }
+        .logo { font-size: 24px; font-weight: bold; }
+        .barcode { text-align: right; }
+        .barcode img { height: 50px; }
+        .row { display: flex; border-bottom: 1px solid #000; margin-bottom: 15px; padding-bottom: 15px; }
+        .col { flex: 1; padding: 0 10px; }
+        .col:first-child { border-right: 1px solid #000; }
+        h3 { margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
+        .box { border: 1px solid #000; padding: 10px; margin-bottom: 15px; }
+        .big-cod { font-size: 28px; font-weight: bold; text-align: center; padding: 10px; border: 2px dashed #000; margin-bottom: 15px; }
+        .details table { width: 100%; border-collapse: collapse; }
+        .details th, .details td { border: 1px solid #000; padding: 5px; text-align: left; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; }
+        @@media print {
+            body { padding: 0; }
+            .waybill { border: none; padding: 0; max-width: 100%; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <div class="no-print" style="margin-bottom: 20px; text-align: center;">
+        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">In Đơn Này</button>
+    </div>
+    
+    <div class="waybill">
+        <div class="header">
+            <div class="logo">Giao Nhận Express</div>
+            <div class="barcode">
+                <div style="font-family: 'Libre Barcode 39', cursive; font-size: 40px;">*@Model.MaVanDon*</div>
+                <div><strong>@Model.MaVanDon</strong></div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <h3>Từ: (Người gửi)</h3>
+                <strong>@Model.NguoiGui?.TenKH</strong><br />
+                SĐT: @Model.NguoiGui?.SoDienThoai<br />
+                Địa chỉ: @Model.NguoiGui?.DiaChi
+            </div>
+            <div class="col">
+                <h3>Đến: (Người nhận)</h3>
+                <strong>@Model.NguoiNhan?.TenKH</strong><br />
+                SĐT: @Model.NguoiNhan?.SoDienThoai<br />
+                Địa chỉ: @Model.NguoiNhan?.DiaChi
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="box">
+                    Dịch vụ: <strong>@Model.LoaiDichVu</strong><br />
+                    Kích thước: @Model.KichThuoc<br />
+                    Trọng lượng: @Model.TrongLuongTong kg<br />
+                    Người trả cước: @(Model.NguoiTraCuoc == "NguoiGui" ? "Người gửi" : "Người nhận")
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <strong>Ghi chú giao hàng:</strong><br />
+                    @Model.HuongDanGiaoHang
+                </div>
+            </div>
+        </div>
+        
+        <div class="big-cod">
+            Thu hộ (COD): @GiaoNhanHang.Helpers.Fmt.Tien(Model.ThuCOD)
+        </div>
+        
+        <div class="details">
+            <h3>Chi tiết hàng hóa</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Nội dung</th>
+                        <th>SL</th>
+                        <th>KL (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int stt = 1;}
+                    @foreach (var c in Model.ChiTiet)
+                    {
+                        <tr>
+                            <td>@(stt++)</td>
+                            <td>@c.LoaiHangHoa?.TenLoaiHang - @c.GhiChu</td>
+                            <td>@c.SoLuong</td>
+                            <td>@c.TrongLuong</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="footer">
+            Chữ ký người gửi ____________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chữ ký người nhận ____________________<br /><br />
+            <small>In lúc: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</small>
+        </div>
+    </div>
+</body>
+</html>

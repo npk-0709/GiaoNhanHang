@@ -1,0 +1,78 @@
+@model List<VanDon>
+@{
+    ViewData["Title"] = "Giải quyết đơn lỗi / ngoại lệ";
+}
+<div class="page-head">
+    <h1>Giải quyết đơn lỗi & Ngoại lệ</h1>
+    <a asp-action="Dashboard">Quay lại quản lý vận đơn</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Tổng đơn lỗi</h3>
+            <div class="fs-2 fw-bold text-danger">@ViewBag.Stats.TongNgoaiLe</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Bị hoàn hàng</h3>
+            <div class="fs-2 fw-bold text-warning">@ViewBag.Stats.HoanHang</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Hư hỏng / Thất lạc</h3>
+            <div class="fs-2 fw-bold text-danger">@ViewBag.Stats.HuHongThatLac</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel text-center">
+            <h3 class="text-mut h6 mb-1">Thiệt hại ước tính</h3>
+            <div class="fs-3 fw-bold text-dark">@GiaoNhanHang.Helpers.Fmt.Tien(ViewBag.Stats.TongThietHai)</div>
+        </div>
+    </div>
+</div>
+
+<div class="panel flush">
+    <div class="p-3 border-bottom"><h2 class="mb-0">Danh sách đơn cần giải quyết</h2></div>
+    <div class="table-wrap">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Mã VĐ</th>
+                    <th>Ngày tạo</th>
+                    <th>Người nhận</th>
+                    <th>Lý do / Trạng thái</th>
+                    <th>Giá trị hàng</th>
+                    <th class="text-end">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td><strong>@v.MaVanDon</strong></td>
+                        <td>@v.NgayTao.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div>@v.NguoiNhan?.TenKH</div>
+                            <small class="text-mut">@v.NguoiNhan?.SoDienThoai</small>
+                        </td>
+                        <td>
+                            <span class="badge @GiaoNhanHang.Helpers.TT.Css(v.TrangThai)">@v.TrangThai</span>
+                        </td>
+                        <td class="text-danger fw-bold">@GiaoNhanHang.Helpers.Fmt.Tien(v.GiaTriBuuGui)</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-brand" asp-action="ChiTiet" asp-route-id="@v.MaVanDon">Chi tiết</a>
+                            <button class="btn btn-sm btn-outline-danger">Yêu cầu đền bù</button>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-mut py-4">Tuyệt vời, bạn không có đơn hàng nào bị lỗi!</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

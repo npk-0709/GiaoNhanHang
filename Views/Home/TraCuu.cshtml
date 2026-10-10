@@ -1,0 +1,40 @@
+@model VanDon?
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Tra cứu vận đơn";
+    var ma = ViewData["ma"] as string;
+}
+<div class="track">
+    <form class="d-flex gap-2 mb-4" method="get" asp-action="TraCuu">
+        <input class="form-control code" name="ma" value="@ma" aria-label="Mã vận đơn" placeholder="Nhập mã vận đơn" required />
+        <button class="btn btn-brand" type="submit">Tra cứu</button>
+    </form>
+
+    @if (Model == null)
+    {
+        <div class="track-card">
+            <h1 class="h5">Không tìm thấy vận đơn <span class="code">@ma</span></h1>
+            <p class="text-mut mb-0">Kiểm tra lại mã trên biên lai (dạng VD + ngày + 4 số) rồi thử lại.</p>
+        </div>
+    }
+    else
+    {
+        <div class="track-card">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                <div>
+                    <div class="text-mut small">Mã vận đơn</div>
+                    <h1 class="h4 code mb-0">@Model.MaVanDon</h1>
+                </div>
+                <span class="tt @TT.Css(Model.TrangThai)">@Model.TrangThai</span>
+            </div>
+            <dl class="kv mb-4">
+                <dt>Ngày gửi</dt><dd>@Fmt.Ngay(Model.NgayTao)</dd>
+                <dt>Người gửi</dt><dd>@Fmt.AnTen(Model.NguoiGui?.TenKH)</dd>
+                <dt>Người nhận</dt><dd>@Fmt.AnTen(Model.NguoiNhan?.TenKH) · @Fmt.AnSdt(Model.NguoiNhan?.SoDienThoai)</dd>
+                <dt>Khối lượng</dt><dd>@Fmt.Kg(Model.TrongLuongTong)</dd>
+            </dl>
+            <h2 class="h6 mb-3">Hành trình</h2>
+            <partial name="_Timeline" model="Model.HanhTrinh" />
+        </div>
+    }
+</div>
