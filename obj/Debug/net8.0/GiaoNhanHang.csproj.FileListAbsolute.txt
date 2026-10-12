@@ -301,4 +301,3 @@ C:\Users\Khuong\Desktop\ThuHuyen\GiaoNhanHang\GiaoNhanHang\obj\Debug\net8.0\swae
 C:\Users\Khuong\Desktop\ThuHuyen\GiaoNhanHang\GiaoNhanHang\obj\Debug\net8.0\GiaoNhan.7407E2E7.Up2Date
 C:\Users\Khuong\Desktop\ThuHuyen\GiaoNhanHang\GiaoNhanHang\obj\Debug\net8.0\GiaoNhanHang.genruntimeconfig.cache
 C:\Users\Khuong\Desktop\ThuHuyen\GiaoNhanHang\GiaoNhanHang\obj\Debug\net8.0\ref\GiaoNhanHang.dll
-C:\Users\Khuong\Desktop\ThuHuyen\GiaoNhanHang\GiaoNhanHang\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

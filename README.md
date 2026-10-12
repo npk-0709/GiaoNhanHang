@@ -48,6 +48,43 @@ Mã vận đơn mẫu để thử tra cứu: xem trong menu Vận đơn (dạng 
 Cước = đơn giá của bậc giá chứa tổng khối lượng × hệ số phụ phí lớn nhất của các loại hàng trong đơn.
 Vượt bậc cuối thì dùng bậc cuối (xem `Data/CuocPhi.cs`).
 
+## Đối tượng CSDL nâng cao (Functions, Views, Triggers, Stored Procedures)
+File script: [`Database/sql_objects.sql`](file:///c:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Database/sql_objects.sql) (tương thích SQL Server 2008 R2, 2012, 2014, 2016+).
+
+### 1. Functions (Hàm SQL)
+- **Scalar Functions**:
+  - `dbo.FN_TinhCuocPhi(@KhoiLuong)`: Tính đơn giá cước từ bảng giá theo khối lượng (kg).
+  - `dbo.FN_TinhCuocCoHeSo(@KhoiLuong, @MaLoaiHang)`: Tính cước có nhân hệ số phụ phí theo loại hàng.
+  - `dbo.FN_TrangThaiVanDon(@MaVanDon)`: Trả về trạng thái hiện tại của vận đơn.
+  - `dbo.FN_SoDonTrongThang(@MaKH, @Thang, @Nam)`: Đếm số đơn hàng khách tạo trong tháng.
+  - `dbo.FN_KiemTraSoDu(@MaKH, @SoTien)`: Kiểm tra khách hàng có đủ số dư ví để rút không.
+- **Table-Valued Functions (TVF)**:
+  - `dbo.FN_HanhTrinhVanDon(@MaVanDon)`: Trả về bảng hành trình giao nhận kèm tên và SĐT shipper.
+  - `dbo.FN_VanDonCuaKhach(@MaKH, @TrangThai)`: Trả về danh sách đơn hàng của khách hàng theo trạng thái.
+
+### 2. Views (Khung nhìn)
+- `VW_DanhSachVanDon`: Tổng hợp thông tin vận đơn kèm thông tin người gửi, người nhận, nhân viên, bảng giá.
+- `VW_ThongKeTrangThai`: Thống kê số đơn, tổng tiền, khối lượng TB theo từng trạng thái.
+- `VW_DoanhThuTheoNgay`: Thống kê doanh thu, số đơn, đơn giao, đơn hoàn và COD theo từng ngày.
+- `VW_HieuSuatNhanVien`: Thống kê số đơn giao thành công, hoàn hàng và tỷ lệ thành công của từng nhân viên.
+- `VW_KhachHangThongKe`: Thống kê số dư, tổng đơn, tổng cước gửi của từng khách hàng.
+- `VW_BaoCaoTongHop`: Báo cáo doanh thu, sản lượng, COD tổng hợp theo tháng/năm.
+
+### 3. Triggers (Ràng buộc & Tự động hóa)
+- `TRG_VanDon_SauCapNhatTrangThai`: Tự động ghi vết hành trình vào `HanhTrinhGiaoHang` khi trạng thái đơn đổi.
+- `TRG_ChiTietVanDon_CapNhatTongKL`: Tự động tính lại `TrongLuongTong` và `TongTien` trong `VanDon` khi thêm/sửa/xóa dòng mặt hàng `ChiTietVanDon`.
+- `TRG_GiaoDich_CapNhatSoDu`: Tự động cộng/trừ số dư `KhachHang.SoDu` ngay khi có bản ghi mới trong `GiaoDichTaiKhoan`.
+- `TRG_KhuyenMai_KiemTraHanSuDung`: Ngăn chặn tạo mã khuyến mãi đã hết hạn.
+
+### 4. Stored Procedures (Thủ tục lưu trữ)
+- `SP_TaoVanDon`: Tạo vận đơn hoàn chỉnh trong 1 transaction (sinh mã, tính cước, thêm chi tiết, ghi hành trình).
+- `SP_CapNhatTrangThaiVanDon`: Cập nhật trạng thái vận đơn, kiểm tra tính hợp lệ và ghi vết hành trình.
+- `SP_DuyetRutTien`: Duyệt hoặc từ chối yêu cầu rút tiền của khách hàng (kiểm tra số dư bằng FN, ghi giao dịch ví, kích hoạt trigger trừ tiền).
+- `SP_BaoCaoDoanhThu`: Truy vấn báo cáo doanh thu theo khoảng ngày chọn lọc.
+- `SP_ThongKeNhanVien`: Báo cáo xếp hạng hiệu suất shipper theo khoảng ngày.
+- `SP_TraCuuVanDon`: Tra cứu thông tin vận đơn và toàn bộ lịch sử hành trình giao nhận.
+
 ## Lưu ý
 - Mật khẩu băm SHA-256 không salt, chỉ phù hợp bài tập. Hệ thống thật nên dùng ASP.NET Core Identity.
 - Giao diện dùng Bootstrap và font Google qua CDN nên cần có Internet khi chạy.
+

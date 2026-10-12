@@ -46,20 +46,9 @@ public class KhachHangController(AppDbContext db) : Controller
         return View(donHang);
     }
 
+    // GET TaoDon đã bị thay bởi modal - redirect về Dashboard
     [Authorize(Roles = "KhachHang")]
-    public async Task<IActionResult> TaoDon()
-    {
-        ViewBag.LoaiHang = await db.LoaiHangs.OrderBy(l => l.MaLoaiHang).ToListAsync();
-        var me = await db.KhachHangs.FindAsync(MaKHHienTai);
-        var vm = new VanDonCreateVM
-        {
-            TenNguoiGui = me?.TenKH,
-            SdtGui = me?.SoDienThoai,
-            DiaChiGui = me?.DiaChi
-        };
-        vm.Items.Add(new ItemVM());
-        return View(vm);
-    }
+    public IActionResult TaoDon() => RedirectToAction(nameof(Dashboard));
 
     [Authorize(Roles = "KhachHang")]
     [HttpPost, ValidateAntiForgeryToken]
@@ -73,7 +62,7 @@ public class KhachHangController(AppDbContext db) : Controller
         {
             ViewBag.LoaiHang = await db.LoaiHangs.OrderBy(l => l.MaLoaiHang).ToListAsync();
             if (vm.Items.Count == 0) vm.Items.Add(new ItemVM());
-            return View(vm);
+            return PartialView("_TaoDonPartial", vm);
         }
 
         var khNhan = await db.KhachHangs.FirstOrDefaultAsync(k => k.SoDienThoai == vm.SdtNhan);
@@ -96,7 +85,7 @@ public class KhachHangController(AppDbContext db) : Controller
             khGui.SoDienThoai = vm.SdtGui ?? khGui.SoDienThoai;
             khGui.DiaChi = vm.DiaChiGui ?? khGui.DiaChi;
         }
-        await db.SaveChangesAsync(); // Lưu cả người gửi lẫn người nhận (để sinh/cập nhật MaKH)
+        await db.SaveChangesAsync();
 
         var tongKg = vm.Items.Sum(i => i.TrongLuong);
         var (bac, tien) = await GiaoNhanHang.Data.CuocPhi.Tinh(db, tongKg, vm.Items.Select(i => i.MaLoaiHang));
@@ -132,7 +121,7 @@ public class KhachHangController(AppDbContext db) : Controller
         await db.SaveChangesAsync();
 
         TempData["ok"] = $"Đã tạo đơn hàng {ma} thành công. Cước phí dự kiến {GiaoNhanHang.Helpers.Fmt.Tien(tien)}.";
-        return RedirectToAction(nameof(Dashboard));
+        return Json(new { success = true, message = TempData["ok"] });
     }
 
     [Authorize(Roles = "KhachHang")]
@@ -141,11 +130,27 @@ public class KhachHangController(AppDbContext db) : Controller
         var maKH = MaKHHienTai;
         var donHang = await db.VanDons.Where(v => v.MaKH_Gui == maKH).ToListAsync();
         
+        // ── Gọi SQL Function dbo.FN_SoDonTrongThang ────────────────────────
+        int tongDonThang;
+        try
+        {
+            var pMaKH  = new Microsoft.Data.SqlClient.SqlParameter("@MaKH", maKH);
+            var pThang = new Microsoft.Data.SqlClient.SqlParameter("@Thang", DateTime.Now.Month);
+            var pNam   = new Microsoft.Data.SqlClient.SqlParameter("@Nam", DateTime.Now.Year);
+            tongDonThang = await db.Database
+                .SqlQueryRaw<int>("SELECT dbo.FN_SoDonTrongThang(@MaKH, @Thang, @Nam) AS Value", pMaKH, pThang, pNam)
+                .FirstOrDefaultAsync();
+        }
+        catch
+        {
+            tongDonThang = donHang.Count(v => v.NgayTao.Month == DateTime.Now.Month && v.NgayTao.Year == DateTime.Now.Year);
+        }
+
         var vm = new {
             DangXuLy = donHang.Count(v => v.TrangThai == TT.ChoLay || v.TrangThai == TT.DaNhapKho || v.TrangThai == TT.DangVanChuyen),
             DaGiao = donHang.Count(v => v.TrangThai == TT.DaGiao),
             NgoaiLe = donHang.Count(v => v.TrangThai == TT.Hoan || v.TrangThai == "Hư hỏng" || v.TrangThai == "Thất lạc"),
-            TongSoDonThang = donHang.Count(v => v.NgayTao.Month == DateTime.Now.Month && v.NgayTao.Year == DateTime.Now.Year),
+            TongSoDonThang = tongDonThang,
             DoanhThuThang = donHang.Where(v => v.NgayTao.Month == DateTime.Now.Month && v.NgayTao.Year == DateTime.Now.Year && v.TrangThai == TT.DaGiao).Sum(v => v.TongTien)
         };
         return View(vm);
@@ -157,10 +162,95 @@ public class KhachHangController(AppDbContext db) : Controller
         var kh = await db.KhachHangs.FindAsync(MaKHHienTai);
         var giaoDich = await db.GiaoDichTaiKhoans.Where(g => g.MaKH == MaKHHienTai).OrderByDescending(g => g.ThoiGian).ToListAsync();
         ViewBag.SoDu = kh?.SoDu ?? 0;
+        ViewBag.YeuCauCho = await db.YeuCauRutTiens.CountAsync(y => y.MaKH == MaKHHienTai && y.TrangThai == "ChoDuyet");
         return View(giaoDich);
     }
 
+    // Nạp tiền: khách submit form xác nhận đã chuyển khoản, tạo giao dịch chờ admin duyệt
+    [Authorize(Roles = "KhachHang"), HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> NapTien(decimal soTien, string ghiChu)
+    {
+        if (soTien < 10000)
+        {
+            TempData["loi"] = "Số tiền nạp tối thiểu là 10.000 ₫.";
+            return RedirectToAction(nameof(TaiKhoan));
+        }
+        // Ghi giao dịch chờ admin duyệt (SoTien = 0 là pending, admin sẽ cộng thủ công hoặc tự động)
+        // Ở đây để đơn giản: tạo giao dịch với SoTien dương, admin xác nhận xong sẽ cộng vào SoDu
+        // Tạo bản ghi giao dịch với ghi chú "Chờ duyệt" để admin xem
+        db.GiaoDichTaiKhoans.Add(new GiaoDichTaiKhoan
+        {
+            MaKH = MaKHHienTai,
+            SoTien = 0, // Chờ admin xác nhận thủ công
+            LoaiGD = "Nạp tiền (chờ duyệt)",
+            ThoiGian = DateTime.Now,
+            GhiChu = $"Yêu cầu nạp {GiaoNhanHang.Helpers.Fmt.Tien(soTien)}" + (string.IsNullOrEmpty(ghiChu) ? "" : " - " + ghiChu)
+        });
+        await db.SaveChangesAsync();
+        TempData["ok"] = $"Đã ghi nhận yêu cầu nạp {GiaoNhanHang.Helpers.Fmt.Tien(soTien)}. Vui lòng chờ admin xác nhận (thường trong 5–15 phút).";
+        return RedirectToAction(nameof(TaiKhoan));
+    }
 
+    // Rút tiền: tạo yêu cầu rút tiền
+    [Authorize(Roles = "KhachHang"), HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> RutTien(decimal soTien, string soTaiKhoan, string nganHang)
+    {
+        var kh = await db.KhachHangs.FindAsync(MaKHHienTai);
+        if (kh == null) return NotFound();
+
+        if (soTien < 10000)
+        {
+            TempData["loi"] = "Số tiền rút tối thiểu là 10.000 ₫.";
+            return RedirectToAction(nameof(TaiKhoan));
+        }
+        if (soTien > kh.SoDu)
+        {
+            TempData["loi"] = "Số dư không đủ.";
+            return RedirectToAction(nameof(TaiKhoan));
+        }
+        if (string.IsNullOrWhiteSpace(soTaiKhoan) || string.IsNullOrWhiteSpace(nganHang))
+        {
+            TempData["loi"] = "Vui lòng nhập số tài khoản và ngân hàng.";
+            return RedirectToAction(nameof(TaiKhoan));
+        }
+
+        // Kiểm tra đã có yêu cầu đang chờ chưa
+        var dangCho = await db.YeuCauRutTiens.AnyAsync(y => y.MaKH == MaKHHienTai && y.TrangThai == "ChoDuyet");
+        if (dangCho)
+        {
+            TempData["loi"] = "Bạn đang có yêu cầu rút tiền chờ duyệt. Vui lòng đợi xử lý trước khi tạo yêu cầu mới.";
+            return RedirectToAction(nameof(TaiKhoan));
+        }
+
+        db.YeuCauRutTiens.Add(new YeuCauRutTien
+        {
+            MaKH = MaKHHienTai,
+            SoTien = soTien,
+            SoTaiKhoan = soTaiKhoan.Trim(),
+            NganHang = nganHang.Trim(),
+            TrangThai = "ChoDuyet",
+            ThoiGianTao = DateTime.Now
+        });
+        await db.SaveChangesAsync();
+        TempData["ok"] = $"Đã tạo yêu cầu rút {GiaoNhanHang.Helpers.Fmt.Tien(soTien)} về {nganHang} - STK {soTaiKhoan}. Chờ admin duyệt.";
+        return RedirectToAction(nameof(TaiKhoan));
+    }
+
+    // Trả về partial form tạo đơn (dùng trong modal)
+    [Authorize(Roles = "KhachHang")]
+    public async Task<IActionResult> GetTaoDonForm()
+    {
+        ViewBag.LoaiHang = await db.LoaiHangs.OrderBy(l => l.MaLoaiHang).ToListAsync();
+        var me = await db.KhachHangs.FindAsync(MaKHHienTai);
+        var vm = new VanDonCreateVM
+        {
+            TenNguoiGui = me?.TenKH,
+            SdtGui = me?.SoDienThoai,
+            DiaChiGui = me?.DiaChi
+        };
+        vm.Items.Add(new ItemVM());
+        return PartialView("_TaoDonPartial", vm);
+    }
 
     [Authorize(Roles = "KhachHang")]
     public async Task<IActionResult> HoSo()
@@ -390,4 +480,54 @@ public class KhachHangController(AppDbContext db) : Controller
         catch (DbUpdateException) { TempData["loi"] = "Không thể xóa: khách hàng đã có vận đơn."; }
         return RedirectToAction(nameof(Index));
     }
+
+    // --- ADMIN: Quản lý yêu cầu rút tiền ---
+    [Authorize(Roles = "QuanLy,TiepNhan")]
+    public async Task<IActionResult> DuyetRutTien(string? trangThai)
+    {
+        var qry = db.YeuCauRutTiens.Include(y => y.KhachHang).AsQueryable();
+        if (!string.IsNullOrEmpty(trangThai))
+            qry = qry.Where(y => y.TrangThai == trangThai);
+        else
+            qry = qry.Where(y => y.TrangThai == "ChoDuyet");
+        ViewBag.TrangThai = trangThai ?? "ChoDuyet";
+        ViewBag.SoChoDuyet = await db.YeuCauRutTiens.CountAsync(y => y.TrangThai == "ChoDuyet");
+        return View(await qry.OrderByDescending(y => y.ThoiGianTao).ToListAsync());
+    }
+
+    [Authorize(Roles = "QuanLy"), HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> XacNhanRutTien(int id, string hanh)
+    {
+        var yc = await db.YeuCauRutTiens.Include(y => y.KhachHang).FirstOrDefaultAsync(y => y.MaYeuCau == id);
+        if (yc == null || yc.TrangThai != "ChoDuyet") { TempData["loi"] = "Yêu cầu không hợp lệ hoặc đã xử lý."; return RedirectToAction(nameof(DuyetRutTien)); }
+
+        try
+        {
+            // ── Sử dụng Stored Procedure SP_DuyetRutTien ───────────────────
+            var pId   = new Microsoft.Data.SqlClient.SqlParameter("@MaYeuCau", id);
+            var pHanh = new Microsoft.Data.SqlClient.SqlParameter("@Hanh", hanh == "duyet" ? "DaDuyet" : "TuChoi");
+            var pKQ   = new Microsoft.Data.SqlClient.SqlParameter
+            {
+                ParameterName = "@KetQua",
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+                Size = 300,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await db.Database.ExecuteSqlRawAsync(
+                "EXEC SP_DuyetRutTien @MaYeuCau, @Hanh, @KetQua OUTPUT",
+                pId, pHanh, pKQ);
+
+            var kq = pKQ.Value?.ToString() ?? "";
+            if (kq.StartsWith("Thành công:")) TempData["ok"] = kq.Replace("Thành công: ", "");
+            else if (kq.StartsWith("Lỗi:")) TempData["loi"] = kq;
+            else TempData["ok"] = kq;
+        }
+        catch (Exception ex)
+        {
+            TempData["loi"] = "Lỗi xử lý duyệt rút tiền: " + ex.Message;
+        }
+        return RedirectToAction(nameof(DuyetRutTien));
+    }
 }
+

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\database\\update.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:database\\update.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\views\\khachhang\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:views\\khachhang\\chitiet.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -60,6 +64,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
       "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|c:\\users\\khuong\\desktop\\thuhuyen\\giaonhanhang\\giaonhanhang\\database\\update.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{4DC19C3E-AC25-D2CE-CC05-5A1836A255B6}|GiaoNhanHang.csproj|solutionrelative:database\\update.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
     }
   ],
   "DocumentGroupContainers": [
@@ -78,19 +86,30 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "update.sql ",
+              "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Database\\update.sql",
+              "RelativeDocumentMoniker": "Database\\update.sql",
+              "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Database\\update.sql",
+              "RelativeToolTip": "Database\\update.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-10-12T04:00:00.074Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ChiTiet.cshtml",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\ChiTiet.cshtml",
               "RelativeDocumentMoniker": "Views\\KhachHang\\ChiTiet.cshtml",
               "ToolTip": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\ChiTiet.cshtml",
               "RelativeToolTip": "Views\\KhachHang\\ChiTiet.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-09T18:31:36.917Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-09T18:31:36.917Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AccessDenied.cshtml",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\Account\\AccessDenied.cshtml",
               "RelativeDocumentMoniker": "Views\\Account\\AccessDenied.cshtml",
@@ -102,7 +121,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "GiaoNhanHang.csproj",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\GiaoNhanHang.csproj",
               "RelativeDocumentMoniker": "GiaoNhanHang.csproj",
@@ -114,7 +133,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "KhachHangController.cs",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\KhachHangController.cs",
               "RelativeDocumentMoniker": "Controllers\\KhachHangController.cs",
@@ -126,7 +145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "TaoNhieuDon.cshtml",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoNhieuDon.cshtml",
               "RelativeDocumentMoniker": "Views\\KhachHang\\TaoNhieuDon.cshtml",
@@ -138,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Microsoft.PackageDependencyResolution.targets",
               "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\10.0.401\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
@@ -150,7 +169,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\KhachHang\\Index.cshtml",
@@ -162,7 +181,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "TaoDon.cshtml",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Views\\KhachHang\\TaoDon.cshtml",
               "RelativeDocumentMoniker": "Views\\KhachHang\\TaoDon.cshtml",
@@ -174,7 +193,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Helpers.cs",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Helpers\\Helpers.cs",
               "RelativeDocumentMoniker": "Helpers\\Helpers.cs",
@@ -186,7 +205,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
@@ -198,7 +217,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "GiaoNhanHang.sql",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Database\\GiaoNhanHang.sql",
               "RelativeDocumentMoniker": "Database\\GiaoNhanHang.sql",
@@ -209,7 +228,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
@@ -221,7 +240,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -233,7 +252,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "README.md",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\README.md",
               "RelativeDocumentMoniker": "README.md",
@@ -245,7 +264,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Khuong\\Desktop\\ThuHuyen\\GiaoNhanHang\\GiaoNhanHang\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",

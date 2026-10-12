@@ -1,0 +1,162 @@
+@model VanDonCreateVM
+@{
+    var loaiHang = (List<LoaiHangHoa>)ViewBag.LoaiHang;
+}
+<form method="post" asp-action="TaoDon" id="frmTaoDon">
+    @Html.AntiForgeryToken()
+    <div id="taoDon-errors"></div>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul class="mb-0 ps-3">
+                @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@e.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="p-3 rounded" style="background:#F3F6FF; border:1px solid #E2E8F0">
+                <h6 class="mb-2 text-brand"><i class="bi bi-person-circle"></i> Người gửi</h6>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <input class="form-control" name="TenNguoiGui" value="@Model.TenNguoiGui" placeholder="Tên người gửi" required />
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control" name="SdtGui" value="@Model.SdtGui" placeholder="Số điện thoại" required />
+                    </div>
+                    <div class="col-12">
+                        <input class="form-control" name="DiaChiGui" value="@Model.DiaChiGui" placeholder="Địa chỉ lấy hàng" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label text-danger">Tên người nhận (*)</label>
+            <input class="form-control" name="TenNhan" value="@Model.TenNhan" required />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label text-danger">Số điện thoại (*)</label>
+            <input class="form-control" name="SdtNhan" value="@Model.SdtNhan" required />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label text-danger">Địa chỉ nhận (*)</label>
+            <input class="form-control" name="DiaChiNhan" value="@Model.DiaChiNhan" required />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email người nhận</label>
+            <input class="form-control" name="EmailNhan" value="@Model.EmailNhan" type="email" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Kích thước (DxRxC cm)</label>
+            <input class="form-control" name="KichThuoc" value="@Model.KichThuoc" placeholder="VD: 10x10x10" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Giá trị bưu gửi (₫)</label>
+            <input class="form-control" type="number" name="GiaTriBuuGui" value="@Model.GiaTriBuuGui" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Thu hộ (COD ₫)</label>
+            <input class="form-control" type="number" name="ThuCOD" value="@Model.ThuCOD" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Thanh toán cước phí</label>
+            <select class="form-select" name="NguoiTraCuoc">
+                <option value="NguoiGui">Người gửi thanh toán</option>
+                <option value="NguoiNhan">Người nhận thanh toán</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Loại dịch vụ</label>
+            <select class="form-select" name="LoaiDichVu">
+                <option value="TieuChuan">Tiêu chuẩn</option>
+                <option value="TietKiem">Tiết kiệm</option>
+                <option value="HoaToc">Hỏa tốc</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Hướng dẫn giao hàng</label>
+            <input class="form-control" name="HuongDanGiaoHang" value="@Model.HuongDanGiaoHang" placeholder="VD: Gọi trước khi giao" />
+        </div>
+
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Hàng hóa</strong>
+                <button type="button" class="btn btn-sm btn-outline-ink" id="modal-addRow"><i class="bi bi-plus-lg"></i> Thêm mặt hàng</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead><tr><th>Loại hàng</th><th>Số lượng</th><th>Trọng lượng (kg)</th><th>Ghi chú</th><th></th></tr></thead>
+                    <tbody id="modal-rows">
+                        @foreach (var it in Model.Items)
+                        {
+                            @await Html.PartialAsync("~/Views/VanDon/_ItemRow.cshtml", it)
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="small text-muted">Trọng lượng là tổng khối lượng của dòng hàng đó.</div>
+        </div>
+
+        <div class="col-12">
+            <div class="d-flex align-items-center gap-3 p-3 rounded" style="background:#f8f9fa; border:1px solid #dee2e6">
+                <div>
+                    <div class="text-muted small">Cước phí dự kiến</div>
+                    <div class="fw-bold fs-5" id="modal-fee">0 ₫</div>
+                    <div class="small text-muted" id="modal-feeNote">Nhập trọng lượng để tính cước.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<template id="modal-rowTpl">@await Html.PartialAsync("~/Views/VanDon/_ItemRow.cshtml", new ItemVM())</template>
+
+<script>
+(function () {
+    var rows = document.getElementById('modal-rows');
+    var tpl = document.getElementById('modal-rowTpl');
+    var timer;
+
+    function reindex() {
+        rows.querySelectorAll('tr.item-row').forEach(function (tr, i) {
+            tr.querySelectorAll('[data-n]').forEach(function (el) { el.name = 'Items[' + i + '].' + el.dataset.n; });
+        });
+    }
+    function estimate() {
+        clearTimeout(timer);
+        timer = setTimeout(async function () {
+            var kg = 0, ids = [];
+            rows.querySelectorAll('tr.item-row').forEach(function (tr) {
+                var w = parseFloat(tr.querySelector('.kg').value);
+                if (w > 0) kg += w;
+                ids.push(tr.querySelector('select').value);
+            });
+            var fee = document.getElementById('modal-fee'), note = document.getElementById('modal-feeNote');
+            if (kg <= 0) { fee.textContent = '0 ₫'; note.textContent = 'Nhập trọng lượng để tính cước.'; return; }
+            try {
+                var r = await fetch('/VanDon/TinhCuoc?kg=' + kg + '&loai=' + ids.join(','));
+                var d = await r.json();
+                fee.textContent = new Intl.NumberFormat('vi-VN').format(d.tien) + ' ₫';
+                note.textContent = 'Tổng ' + kg.toFixed(2).replace(/\.?0+$/, '') + ' kg' + (d.bac ? ' · bậc giá ' + d.bac : '');
+            } catch (e) { note.textContent = 'Không tính được cước, thử lại sau.'; }
+        }, 250);
+    }
+    document.getElementById('modal-addRow').addEventListener('click', function () {
+        rows.appendChild(tpl.content.cloneNode(true));
+        reindex(); estimate();
+    });
+    rows.addEventListener('click', function (e) {
+        var b = e.target.closest('.btn-del');
+        if (!b) return;
+        if (rows.querySelectorAll('tr.item-row').length > 1) { b.closest('tr').remove(); reindex(); estimate(); }
+    });
+    rows.addEventListener('input', estimate);
+    rows.addEventListener('change', estimate);
+    reindex(); estimate();
+})();
+</script>

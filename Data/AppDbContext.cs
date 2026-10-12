@@ -5,16 +5,32 @@ namespace GiaoNhanHang.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<KhachHang> KhachHangs => Set<KhachHang>();
-    public DbSet<BuuCuc> BuuCucs => Set<BuuCuc>();
-    public DbSet<NhanVien> NhanViens => Set<NhanVien>();
-    public DbSet<BangGia> BangGias => Set<BangGia>();
-    public DbSet<LoaiHangHoa> LoaiHangs => Set<LoaiHangHoa>();
-    public DbSet<VanDon> VanDons => Set<VanDon>();
-    public DbSet<ChiTietVanDon> ChiTiets => Set<ChiTietVanDon>();
-    public DbSet<HanhTrinhGiaoHang> HanhTrinhs => Set<HanhTrinhGiaoHang>();
-    public DbSet<KhuyenMai> KhuyenMais => Set<KhuyenMai>();
-    public DbSet<GiaoDichTaiKhoan> GiaoDichTaiKhoans => Set<GiaoDichTaiKhoan>();
+    /* ---- Bảng chính ---- */
+    public DbSet<KhachHang>          KhachHangs          => Set<KhachHang>();
+    public DbSet<BuuCuc>             BuuCucs             => Set<BuuCuc>();
+    public DbSet<NhanVien>           NhanViens           => Set<NhanVien>();
+    public DbSet<BangGia>            BangGias            => Set<BangGia>();
+    public DbSet<LoaiHangHoa>        LoaiHangs           => Set<LoaiHangHoa>();
+    public DbSet<VanDon>             VanDons             => Set<VanDon>();
+    public DbSet<ChiTietVanDon>      ChiTiets            => Set<ChiTietVanDon>();
+    public DbSet<HanhTrinhGiaoHang>  HanhTrinhs          => Set<HanhTrinhGiaoHang>();
+    public DbSet<KhuyenMai>          KhuyenMais          => Set<KhuyenMai>();
+    public DbSet<GiaoDichTaiKhoan>   GiaoDichTaiKhoans   => Set<GiaoDichTaiKhoan>();
+    public DbSet<YeuCauRutTien>      YeuCauRutTiens      => Set<YeuCauRutTien>();
+
+    /* ---- SQL VIEWS (Keyless Entities) ---- */
+    public DbSet<VW_DanhSachVanDon>   VW_DanhSachVanDons   => Set<VW_DanhSachVanDon>();
+    public DbSet<VW_ThongKeTrangThai> VW_ThongKeTrangThais => Set<VW_ThongKeTrangThai>();
+    public DbSet<VW_DoanhThuTheoNgay> VW_DoanhThuTheoNgays => Set<VW_DoanhThuTheoNgay>();
+    public DbSet<VW_HieuSuatNhanVien> VW_HieuSuatNhanViens => Set<VW_HieuSuatNhanVien>();
+    public DbSet<VW_KhachHangThongKe> VW_KhachHangThongKes => Set<VW_KhachHangThongKe>();
+    public DbSet<VW_BaoCaoTongHop>    VW_BaoCaoTongHops    => Set<VW_BaoCaoTongHop>();
+
+    /* ---- TVF & SP result rows (dùng FromSqlRaw) ---- */
+    public DbSet<HanhTrinhVanDonRow> HanhTrinhVanDonRows => Set<HanhTrinhVanDonRow>();
+    public DbSet<SpDoanhThuRow>      SpDoanhThuRows      => Set<SpDoanhThuRow>();
+    public DbSet<SpNhanVienRow>      SpNhanVienRows      => Set<SpNhanVienRow>();
+
     protected override void OnModelCreating(ModelBuilder mb)
     {
         mb.Entity<KhachHang>().ToTable("KhachHang");
@@ -73,5 +89,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.Property(x => x.SoTien).HasColumnType("decimal(18,0)");
             e.HasOne(x => x.KhachHang).WithMany().HasForeignKey(x => x.MaKH).OnDelete(DeleteBehavior.Restrict);
         });
+        mb.Entity<YeuCauRutTien>(e =>
+        {
+            e.ToTable("YeuCauRutTien");
+            e.Property(x => x.SoTien).HasColumnType("decimal(18,0)");
+            e.HasOne(x => x.KhachHang).WithMany().HasForeignKey(x => x.MaKH).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        /* ---- SQL VIEWS mapping ---- */
+        mb.Entity<VW_DanhSachVanDon>().HasNoKey().ToView("VW_DanhSachVanDon");
+        mb.Entity<VW_ThongKeTrangThai>().HasNoKey().ToView("VW_ThongKeTrangThai");
+        mb.Entity<VW_DoanhThuTheoNgay>().HasNoKey().ToView("VW_DoanhThuTheoNgay");
+        mb.Entity<VW_HieuSuatNhanVien>().HasNoKey().ToView("VW_HieuSuatNhanVien");
+        mb.Entity<VW_KhachHangThongKe>().HasNoKey().ToView("VW_KhachHangThongKe");
+        mb.Entity<VW_BaoCaoTongHop>().HasNoKey().ToView("VW_BaoCaoTongHop");
+
+        /* ---- TVF & SP result sets ---- */
+        mb.Entity<HanhTrinhVanDonRow>().HasNoKey();
+        mb.Entity<SpDoanhThuRow>().HasNoKey();
+        mb.Entity<SpNhanVienRow>().HasNoKey();
     }
 }

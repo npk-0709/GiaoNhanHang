@@ -117,6 +117,17 @@ public class VanDonController(AppDbContext db) : Controller
             .Include(v => v.HanhTrinh).ThenInclude(h => h.NhanVien)
             .FirstOrDefaultAsync(v => v.MaVanDon == id);
         if (vd == null) return NotFound();
+
+        try
+        {
+            // Minh họa gọi Table-Valued Function FN_HanhTrinhVanDon
+            var pId = new Microsoft.Data.SqlClient.SqlParameter("@MaVD", id);
+            ViewBag.HanhTrinhSql = await db.HanhTrinhVanDonRows
+                .FromSqlRaw("SELECT * FROM dbo.FN_HanhTrinhVanDon(@MaVD) ORDER BY ThoiGianCapNhat", pId)
+                .ToListAsync();
+        }
+        catch { }
+
         return View(vd);
     }
 
@@ -147,22 +158,50 @@ public class VanDonController(AppDbContext db) : Controller
         if (!TT.Tat.Contains(trangThai)) return (false, "Trạng thái không hợp lệ.");
         if (string.IsNullOrWhiteSpace(viTri)) return (false, "Nhập vị trí hiện tại của hàng.");
 
-        var vd = await db.VanDons.FirstOrDefaultAsync(v => v.MaVanDon == maVanDon);
-        if (vd == null) return (false, $"Không tìm thấy vận đơn {maVanDon}.");
-        if (TT.Cuoi(vd.TrangThai)) return (false, $"Vận đơn {maVanDon} đã kết thúc ({vd.TrangThai}), không thể cập nhật thêm.");
-
-        db.HanhTrinhs.Add(new HanhTrinhGiaoHang
+        try
         {
-            MaVanDon = vd.MaVanDon,
-            MaNV_Giao = MaNVHienTai,
-            ThoiGianCapNhat = DateTime.Now,
-            ViTri = viTri.Trim(),
-            TrangThai = trangThai,
-            TrangThaiChiTiet = string.IsNullOrWhiteSpace(ghiChu) ? null : ghiChu.Trim()
-        });
-        vd.TrangThai = trangThai;
-        await db.SaveChangesAsync();
-        return (true, $"Đã cập nhật {maVanDon}: {trangThai}.");
+            // ── Sử dụng Stored Procedure SP_CapNhatTrangThaiVanDon ─────────
+            var pMa = new Microsoft.Data.SqlClient.SqlParameter("@MaVanDon", maVanDon.Trim().ToUpperInvariant());
+            var pTT = new Microsoft.Data.SqlClient.SqlParameter("@TrangThai", trangThai);
+            var pNV = new Microsoft.Data.SqlClient.SqlParameter("@MaNV", MaNVHienTai);
+            var pVT = new Microsoft.Data.SqlClient.SqlParameter("@ViTri", viTri.Trim());
+            var pGC = new Microsoft.Data.SqlClient.SqlParameter("@GhiChu", (object?)ghiChu?.Trim() ?? DBNull.Value);
+            var pKQ = new Microsoft.Data.SqlClient.SqlParameter
+            {
+                ParameterName = "@KetQua",
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+                Size = 200,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await db.Database.ExecuteSqlRawAsync(
+                "EXEC SP_CapNhatTrangThaiVanDon @MaVanDon, @TrangThai, @MaNV, @ViTri, @GhiChu, @KetQua OUTPUT",
+                pMa, pTT, pNV, pVT, pGC, pKQ);
+
+            var kq = pKQ.Value?.ToString() ?? "";
+            if (kq.StartsWith("Thành công:")) return (true, kq.Replace("Thành công: ", ""));
+            return (false, kq);
+        }
+        catch
+        {
+            // Dự phòng (fallback EF)
+            var vd = await db.VanDons.FirstOrDefaultAsync(v => v.MaVanDon == maVanDon);
+            if (vd == null) return (false, $"Không tìm thấy vận đơn {maVanDon}.");
+            if (TT.Cuoi(vd.TrangThai)) return (false, $"Vận đơn {maVanDon} đã kết thúc ({vd.TrangThai}), không thể cập nhật thêm.");
+
+            db.HanhTrinhs.Add(new HanhTrinhGiaoHang
+            {
+                MaVanDon = vd.MaVanDon,
+                MaNV_Giao = MaNVHienTai,
+                ThoiGianCapNhat = DateTime.Now,
+                ViTri = viTri.Trim(),
+                TrangThai = trangThai,
+                TrangThaiChiTiet = string.IsNullOrWhiteSpace(ghiChu) ? null : ghiChu.Trim()
+            });
+            vd.TrangThai = trangThai;
+            await db.SaveChangesAsync();
+            return (true, $"Đã cập nhật {maVanDon}: {trangThai}.");
+        }
     }
 
     async Task NapDanhMuc()

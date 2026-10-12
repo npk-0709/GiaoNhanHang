@@ -1,0 +1,126 @@
+@model List<YeuCauRutTien>
+@{
+    ViewData["Title"] = "Duyệt yêu cầu rút tiền";
+    string trangThaiHienTai = ViewBag.TrangThai ?? "ChoDuyet";
+}
+<div class="page-head">
+    <h1>
+        Duyệt yêu cầu rút tiền
+        @if (ViewBag.SoChoDuyet > 0)
+        {
+            <span class="badge bg-danger ms-2">@ViewBag.SoChoDuyet chờ duyệt</span>
+        }
+    </h1>
+</div>
+
+@if (TempData["ok"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        @TempData["ok"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["loi"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        @TempData["loi"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="panel flush">
+    <div class="p-3 border-bottom d-flex gap-2">
+        <a asp-action="DuyetRutTien" class="btn @(trangThaiHienTai == "ChoDuyet" ? "btn-brand" : "btn-outline-ink") btn-sm">
+            Chờ duyệt
+            @if (ViewBag.SoChoDuyet > 0)
+            {
+                <span class="badge bg-danger ms-1">@ViewBag.SoChoDuyet</span>
+            }
+        </a>
+        <a asp-action="DuyetRutTien" asp-route-trangThai="DaDuyet" class="btn @(trangThaiHienTai == "DaDuyet" ? "btn-brand" : "btn-outline-ink") btn-sm">Đã duyệt</a>
+        <a asp-action="DuyetRutTien" asp-route-trangThai="TuChoi" class="btn @(trangThaiHienTai == "TuChoi" ? "btn-brand" : "btn-outline-ink") btn-sm">Từ chối</a>
+    </div>
+    <div class="table-wrap">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Khách hàng</th>
+                    <th>Số tiền</th>
+                    <th>Tài khoản nhận</th>
+                    <th>Ngân hàng</th>
+                    <th>Thời gian tạo</th>
+                    <th>Trạng thái</th>
+                    @if (User.IsInRole("QuanLy") && trangThaiHienTai == "ChoDuyet")
+                    {
+                        <th class="text-end">Thao tác</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var yc in Model)
+                {
+                    <tr>
+                        <td>@yc.MaYeuCau</td>
+                        <td>
+                            <div class="fw-semibold">@yc.KhachHang?.TenKH</div>
+                            <small class="text-muted">@yc.KhachHang?.SoDienThoai</small>
+                        </td>
+                        <td class="fw-bold text-danger">@GiaoNhanHang.Helpers.Fmt.Tien(yc.SoTien)</td>
+                        <td><code>@yc.SoTaiKhoan</code></td>
+                        <td>@yc.NganHang</td>
+                        <td>
+                            <div>@yc.ThoiGianTao.ToString("dd/MM/yyyy HH:mm")</div>
+                            @if (yc.ThoiGianDuyet.HasValue)
+                            {
+                                <small class="text-muted">Duyệt: @yc.ThoiGianDuyet.Value.ToString("dd/MM/yyyy HH:mm")</small>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var css = yc.TrangThai switch {
+                                    "ChoDuyet" => "badge bg-warning text-dark",
+                                    "DaDuyet"  => "badge bg-success",
+                                    "TuChoi"   => "badge bg-secondary",
+                                    _          => "badge bg-light text-dark"
+                                };
+                                var label = yc.TrangThai switch {
+                                    "ChoDuyet" => "Chờ duyệt",
+                                    "DaDuyet"  => "Đã duyệt",
+                                    "TuChoi"   => "Từ chối",
+                                    _          => yc.TrangThai
+                                };
+                            }
+                            <span class="@css">@label</span>
+                        </td>
+                        @if (User.IsInRole("QuanLy") && trangThaiHienTai == "ChoDuyet")
+                        {
+                            <td class="text-end">
+                                <form method="post" asp-action="XacNhanRutTien" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@yc.MaYeuCau" />
+                                    <button type="submit" name="hanh" value="duyet" class="btn btn-sm btn-success me-1"
+                                            onclick="return confirm('Duyệt rút @GiaoNhanHang.Helpers.Fmt.Tien(yc.SoTien) cho @(yc.KhachHang?.TenKH)? Tiền sẽ bị trừ ngay.')">
+                                        <i class="bi bi-check-lg"></i> Duyệt
+                                    </button>
+                                    <button type="submit" name="hanh" value="tuchoi" class="btn btn-sm btn-outline-secondary"
+                                            onclick="return confirm('Từ chối yêu cầu rút tiền này?')">
+                                        <i class="bi bi-x-lg"></i> Từ chối
+                                    </button>
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-5">
+                            Không có yêu cầu nào @(trangThaiHienTai == "ChoDuyet" ? "đang chờ duyệt" : trangThaiHienTai == "DaDuyet" ? "đã được duyệt" : "bị từ chối").
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

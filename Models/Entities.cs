@@ -123,3 +123,17 @@ public class GiaoDichTaiKhoan
     [StringLength(250)] public string? GhiChu { get; set; }
     public KhachHang? KhachHang { get; set; }
 }
+
+public class YeuCauRutTien
+{
+    [Key] public int MaYeuCau { get; set; }
+    public int MaKH { get; set; }
+    public decimal SoTien { get; set; }
+    [StringLength(30)] public string SoTaiKhoan { get; set; } = "";
+    [StringLength(100)] public string NganHang { get; set; } = "";
+    [StringLength(20)] public string TrangThai { get; set; } = "ChoDuyet"; // ChoDuyet | DaDuyet | TuChoi
+    public DateTime ThoiGianTao { get; set; } = DateTime.Now;
+    public DateTime? ThoiGianDuyet { get; set; }
+    [StringLength(250)] public string? GhiChu { get; set; }
+    public KhachHang? KhachHang { get; set; }
+}

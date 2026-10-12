@@ -6,12 +6,36 @@
     <h1>Số dư và Thanh toán</h1>
 </div>
 
+@if (TempData["ok"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        @TempData["ok"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["loi"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        @TempData["loi"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <div class="panel mb-4">
     <h2>Số dư tài khoản</h2>
     <div class="fs-1 text-brand fw-bold mb-3">@GiaoNhanHang.Helpers.Fmt.Tien(ViewBag.SoDu)</div>
-    <div class="d-flex gap-2">
-        <button class="btn btn-brand">Nạp tiền</button>
-        <button class="btn btn-outline-ink">Rút tiền</button>
+    <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#modalNapTien">
+            <i class="bi bi-plus-circle"></i> Nạp tiền
+        </button>
+        <button class="btn btn-outline-ink" data-bs-toggle="modal" data-bs-target="#modalRutTien"
+                @(ViewBag.YeuCauCho > 0 ? "disabled title=\"Đang có yêu cầu rút tiền chờ duyệt\"" : "")>
+            <i class="bi bi-arrow-up-circle"></i> Rút tiền
+            @if (ViewBag.YeuCauCho > 0)
+            {
+                <span class="badge bg-warning text-dark ms-1">Chờ duyệt</span>
+            }
+        </button>
         <button class="btn btn-outline-ink"><i class="bi bi-gear"></i> Cài đặt thanh toán</button>
     </div>
 </div>
@@ -33,7 +57,7 @@
                 <tr>
                     <td>@g.ThoiGian.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@g.LoaiGD</td>
-                    <td class="text-end @(g.SoTien > 0 ? "text-success" : "text-danger")">
+                    <td class="text-end @(g.SoTien > 0 ? "text-success" : g.SoTien < 0 ? "text-danger" : "text-muted")">
                         @(g.SoTien > 0 ? "+" : "")@GiaoNhanHang.Helpers.Fmt.Tien(g.SoTien)
                     </td>
                     <td>@g.GhiChu</td>
@@ -46,3 +70,135 @@
         </tbody>
     </table>
 </div>
+
+<!-- Modal Nạp Tiền -->
+<div class="modal fade" id="modalNapTien" tabindex="-1" aria-labelledby="modalNapTienLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-brand text-white">
+                <h5 class="modal-title" id="modalNapTienLabel"><i class="bi bi-qr-code"></i> Nạp tiền qua chuyển khoản</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-4 align-items-start">
+                    <div class="col-md-5 text-center">
+                        <p class="text-muted small mb-2">Quét mã QR để chuyển khoản</p>
+                        <img src="https://img.vietqr.io/image/970416-12940231-compact.png?addInfo=DONATEPHUKHUONG0709&accountName=NGUYEN PHU KHUONG"
+                             alt="QR Code" class="img-fluid rounded border"
+                             style="max-width: 220px;" />
+                    </div>
+                    <div class="col-md-7">
+                        <h6 class="fw-bold mb-3 text-brand">Thông tin chuyển khoản</h6>
+                        <table class="table table-sm table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="text-muted" style="width:40%">Ngân hàng</td>
+                                    <td><strong>VPBank (970416)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Số tài khoản</td>
+                                    <td>
+                                        <strong id="stk-copy">12940231</strong>
+                                        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="copySTK()">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Chủ tài khoản</td>
+                                    <td><strong>NGUYEN PHU KHUONG</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Nội dung CK</td>
+                                    <td><strong class="text-danger">DONATEPHUKHUONG0709</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="alert alert-warning py-2 small">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Vui lòng ghi <strong>đúng nội dung chuyển khoản</strong> để hệ thống xác nhận tự động.
+                            Sau khi chuyển khoản, nhập số tiền và bấm <strong>Xác nhận đã chuyển</strong>.
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <form method="post" asp-action="NapTien" id="frmNapTien">
+                    @Html.AntiForgeryToken()
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Số tiền đã chuyển (₫) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" name="soTien" min="10000" step="1000"
+                                   placeholder="VD: 100000" required />
+                            <div class="form-text">Tối thiểu 10.000 ₫</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Ghi chú (tuỳ chọn)</label>
+                            <input type="text" class="form-control" name="ghiChu" placeholder="VD: Nạp cho đơn hàng ABC" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-brand" onclick="document.getElementById('frmNapTien').submit()">
+                    <i class="bi bi-check-circle"></i> Xác nhận đã chuyển
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rút Tiền -->
+<div class="modal fade" id="modalRutTien" tabindex="-1" aria-labelledby="modalRutTienLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRutTienLabel"><i class="bi bi-arrow-up-circle"></i> Yêu cầu rút tiền</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info small py-2 mb-3">
+                    <i class="bi bi-info-circle"></i>
+                    Số dư hiện tại: <strong>@GiaoNhanHang.Helpers.Fmt.Tien(ViewBag.SoDu)</strong>.
+                    Yêu cầu sẽ được admin duyệt trong vòng 1–3 ngày làm việc.
+                </div>
+                <form method="post" asp-action="RutTien" id="frmRutTien">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số tiền muốn rút (₫) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="soTien" min="10000" step="1000"
+                               max="@ViewBag.SoDu" placeholder="VD: 200000" required />
+                        <div class="form-text">Tối thiểu 10.000 ₫ · Tối đa @GiaoNhanHang.Helpers.Fmt.Tien(ViewBag.SoDu)</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số tài khoản nhận <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="soTaiKhoan" placeholder="Nhập số tài khoản ngân hàng" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Ngân hàng <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="nganHang" placeholder="VD: Vietcombank, MB Bank, VPBank..." required />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="document.getElementById('frmRutTien').submit()">
+                    <i class="bi bi-arrow-up-circle"></i> Gửi yêu cầu rút tiền
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+function copySTK() {
+    var stk = document.getElementById('stk-copy').textContent;
+    navigator.clipboard.writeText(stk).then(function () {
+        var btn = event.target.closest('button');
+        btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+        setTimeout(function () { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 1500);
+    });
+}
+</script>
+}

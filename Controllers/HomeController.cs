@@ -18,6 +18,19 @@ public class HomeController(AppDbContext db) : Controller
             .Include(v => v.HanhTrinh)
             .FirstOrDefaultAsync(v => v.MaVanDon == ma);
 
+        if (vd != null)
+        {
+            try
+            {
+                // Gọi Table-Valued Function FN_HanhTrinhVanDon
+                var pId = new Microsoft.Data.SqlClient.SqlParameter("@MaVD", ma);
+                ViewBag.HanhTrinhSql = await db.HanhTrinhVanDonRows
+                    .FromSqlRaw("SELECT * FROM dbo.FN_HanhTrinhVanDon(@MaVD) ORDER BY ThoiGianCapNhat", pId)
+                    .ToListAsync();
+            }
+            catch { }
+        }
+
         ViewData["ma"] = ma;
         return View(vd);
     }

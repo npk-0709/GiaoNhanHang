@@ -51,16 +51,16 @@ public static class Fmt
     }
 }
 
-//public static class Mk
-//{
-//    // Chỉ dùng cho bài tập. Hệ thống thật nên dùng ASP.NET Core Identity / PBKDF2 có salt.
-//    public static string Hash(string s) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(s)));
-//}
 public static class Mk
 {
     // Chỉ dùng cho bài tập. Hệ thống thật nên dùng ASP.NET Core Identity / PBKDF2 có salt.
-    public static string Hash(string s) => Convert.ToHexString(SHA1.HashData(Encoding.UTF8.GetBytes(s)));
+    public static string Hash(string s) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(s)));
 }
+//public static class Mk
+//{
+//    // Chỉ dùng cho bài tập. Hệ thống thật nên dùng ASP.NET Core Identity / PBKDF2 có salt.
+//    public static string Hash(string s) => Convert.ToHexString(SHA1.HashData(Encoding.UTF8.GetBytes(s)));
+//}
 
 public static class ModelStateExt
 {

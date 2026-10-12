@@ -31,4 +31,25 @@ public static class CuocPhi
         }
         return (bac, Math.Round(bac.DonGia * heSo, 0));
     }
+
+    /// <summary>
+    /// Tính cước sử dụng SQL Scalar Function: dbo.FN_TinhCuocCoHeSo
+    /// </summary>
+    public static async Task<decimal> TinhBangSqlFunction(AppDbContext db, decimal kg, int maLoaiHang)
+    {
+        try
+        {
+            var pKg   = new Microsoft.Data.SqlClient.SqlParameter("@kg", kg);
+            var pLoai = new Microsoft.Data.SqlClient.SqlParameter("@loai", maLoaiHang);
+            var cuoc  = await db.Database
+                .SqlQueryRaw<decimal>("SELECT dbo.FN_TinhCuocCoHeSo(@kg, @loai) AS Value", pKg, pLoai)
+                .FirstOrDefaultAsync();
+            return cuoc;
+        }
+        catch
+        {
+            var (_, tien) = await Tinh(db, kg, new[] { maLoaiHang });
+            return tien;
+        }
+    }
 }

@@ -67,6 +67,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXERhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Views/KhachHang/DuyetRutTien.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXER1eWV0UnV0VGllbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Views/KhachHang/HoSo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXEhvU28uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -97,6 +101,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Views/KhachHang/ThongKe.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXFRob25nS2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Views/KhachHang/_TaoDonPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2hhY2hIYW5nXF9UYW9Eb25QYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Khuong/Desktop/ThuHuyen/GiaoNhanHang/GiaoNhanHang/Views/LoaiHang/Index.cshtml]

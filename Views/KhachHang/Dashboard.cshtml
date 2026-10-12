@@ -7,9 +7,26 @@
     <h1>Quản lý vận đơn của bạn</h1>
     <div>
         <a class="btn btn-outline-brand me-2" asp-action="XuatExcel"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</a>
-        <a class="btn btn-brand" asp-action="TaoDon"><i class="bi bi-plus-lg"></i> Tạo đơn mới</a>
+        <button class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#modalTaoDon" id="btnMoTaoDon">
+            <i class="bi bi-plus-lg"></i> Tạo đơn mới
+        </button>
     </div>
 </div>
+
+@if (TempData["ok"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        @TempData["ok"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["loi"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+        @TempData["loi"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <div class="panel flush">
     <div class="p-3 border-bottom bg-light">
@@ -84,8 +101,9 @@
                 @if (Model.Count == 0)
                 {
                     <tr>
-                        <td colspan="6" class="text-center text-mut py-5">
-                            Bạn chưa có vận đơn nào. <a asp-action="TaoDon">Tạo đơn ngay!</a>
+                        <td colspan="7" class="text-center text-mut py-5">
+                            Bạn chưa có vận đơn nào.
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalTaoDon">Tạo đơn ngay!</a>
                         </td>
                     </tr>
                 }
@@ -93,3 +111,112 @@
         </table>
     </div>
 </div>
+
+<!-- Modal tạo đơn hàng -->
+<div class="modal fade" id="modalTaoDon" tabindex="-1" aria-labelledby="modalTaoDonLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTaoDonLabel"><i class="bi bi-box-seam"></i> Tạo đơn hàng mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalTaoDonBody">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-brand" role="status"></div>
+                    <div class="mt-2 text-muted">Đang tải form...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-brand" id="btnSubmitTaoDon">
+                    <i class="bi bi-check-lg"></i> Tạo đơn hàng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    var modal = document.getElementById('modalTaoDon');
+    var body = document.getElementById('modalTaoDonBody');
+    var btnSubmit = document.getElementById('btnSubmitTaoDon');
+    var loaded = false;
+
+    modal.addEventListener('show.bs.modal', function () {
+        if (loaded) return;
+        fetch('/KhachHang/GetTaoDonForm')
+            .then(function (r) { return r.text(); })
+            .then(function (html) {
+                body.innerHTML = html;
+                // Chạy script trong partial nếu có
+                body.querySelectorAll('script').forEach(function (s) {
+                    var ns = document.createElement('script');
+                    ns.textContent = s.textContent;
+                    document.body.appendChild(ns);
+                    document.body.removeChild(ns);
+                });
+                loaded = true;
+            })
+            .catch(function () {
+                body.innerHTML = '<div class="alert alert-danger">Không tải được form. Vui lòng thử lại.</div>';
+            });
+    });
+
+    btnSubmit.addEventListener('click', function () {
+        var form = document.getElementById('frmTaoDon');
+        if (!form) return;
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang tạo...';
+
+        var fd = new FormData(form);
+        fetch('/KhachHang/TaoDon', {
+            method: 'POST',
+            body: fd
+        })
+        .then(function (r) {
+            var ct = r.headers.get('content-type') || '';
+            if (ct.includes('application/json')) return r.json().then(function (d) { return { type: 'json', data: d }; });
+            return r.text().then(function (t) { return { type: 'html', data: t }; });
+        })
+        .then(function (res) {
+            if (res.type === 'json' && res.data.success) {
+                // Thành công
+                var bsModal = bootstrap.Modal.getInstance(modal);
+                bsModal.hide();
+                // Hiển thị thông báo và reload
+                var alert = document.createElement('div');
+                alert.className = 'alert alert-success alert-dismissible fade show mb-3';
+                alert.innerHTML = res.data.message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+                document.querySelector('.page-head').after(alert);
+                setTimeout(function () { location.reload(); }, 1500);
+            } else if (res.type === 'html') {
+                // Lỗi validation - hiện lại form với lỗi
+                body.innerHTML = res.data;
+                body.querySelectorAll('script').forEach(function (s) {
+                    var ns = document.createElement('script');
+                    ns.textContent = s.textContent;
+                    document.body.appendChild(ns);
+                    document.body.removeChild(ns);
+                });
+                loaded = false;
+            }
+        })
+        .catch(function () {
+            body.innerHTML = '<div class="alert alert-danger">Lỗi kết nối. Vui lòng thử lại.</div>';
+        })
+        .finally(function () {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="bi bi-check-lg"></i> Tạo đơn hàng';
+        });
+    });
+
+    // Reset form khi đóng modal
+    modal.addEventListener('hidden.bs.modal', function () {
+        loaded = false;
+        body.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-brand" role="status"></div><div class="mt-2 text-muted">Đang tải form...</div></div>';
+    });
+})();
+</script>
+}
